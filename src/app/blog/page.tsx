@@ -1,59 +1,75 @@
+import PublicLayout from '../components/PublicLayout';
+import Link from 'next/link';
+
 export const metadata = {
-  title: 'Blog Instiucional | Instituto Gênesis',
+  title: 'Blog Institucional | Instituto Gênesis',
 };
 
 export default function Blog() {
+  const posts = [
+    { type: "DOCUMENTÁRIO", date: "2019", title: "O Sucesso de 'Catadores: Da Invisibilidade ao Protagonismo'", desc: "Como evidenciamos a vida real e as forças das comunidades através do poder do audiovisual e narrativas verdadeiras.", color: "#F59E0B" },
+    { type: "ECONOMIA SOLIDÁRIA", date: "2022", title: "Grupos avançam criando produtos de alta renda familiar", desc: "Sementes crioulas preservadas pelas mulheres do campo se tornam base forte para negócios coletivos sustentáveis.", color: "#10B981" },
+    { type: "AÇÕES COMUNITÁRIAS", date: "2024", title: "Novas turmas de Polos Técnicos de Empregabilidade", desc: "Iniciando atividades curriculares com jovens buscando oportunidades reais nas associações de agricultura.", color: "#2B44FF" }
+  ];
+
   return (
-    <main className="animate-fade-in-up">
-      <section className="bg-primary section-padding text-center">
-        <div className="container" style={{color: '#fff'}}>
-          <h1 style={{fontSize: '3.5rem', marginBottom: '20px', color: '#fff'}}>Notícias e Relatos</h1>
-          <p style={{fontSize: '1.2rem'}}>Acompanhe os projetos, histórias de comunidades e impactos do Instituto Gênesis.</p>
-        </div>
-      </section>
-
-      <section className="bg-white section-padding">
-        <div className="container">
-          
-          {/* Main Feature Article */}
-          <div style={{display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '60px'}}>
-            <div style={{width: '100%', height: '400px', borderRadius: '16px', backgroundColor: 'var(--color-background)'}}></div>
-            <div style={{maxWidth: '800px'}}>
-              <span style={{color: 'var(--color-primary)', fontWeight: 'bold', fontSize: '0.9rem', letterSpacing: '1px'}}>NOVOS PROJETOS • 10 MAR 2024</span>
-              <h2 style={{fontSize: '2.5rem', margin: '10px 0'}}>Implantação de Quintais Agroecológicos apoiados pelo MDA</h2>
-              <p style={{color: 'var(--color-text-secondary)', fontSize: '1.1rem'}}>Mais de 2 projetos recentemente aprovados para implementação de Unidades Ecológicas começam a impactar 5 municípios no Maranhão...</p>
-              <button className="btn-primary" style={{marginTop: '20px'}}>Ler Artigo Completo</button>
-            </div>
+    <PublicLayout>
+      <main className="animate-fade-up">
+        {/* HEADER */}
+        <section style={{ borderBottom: '1px solid var(--site-border)', padding: '30px 0', background: 'var(--site-surface)' }}>
+          <div className="container" style={{ textAlign: 'center' }}>
+            <h1 style={{ fontSize: '3rem', marginBottom: 12 }}>Notícias e Relatos</h1>
+            <p style={{ fontSize: '1.1rem', color: 'var(--site-text-secondary)' }}>Acompanhe os projetos, histórias e o impacto das ações do Instituto Gênesis.</p>
           </div>
+        </section>
 
-          {/* Grid 3 colunas */}
-          <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px'}}>
+        {/* POSTS GRID */}
+        <section className="section-padding" style={{ background: 'var(--site-bg)' }}>
+          <div className="container">
             
-            <div style={{display: 'flex', flexDirection: 'column', gap: '15px'}}>
-              <div style={{height: '220px', borderRadius: '12px', backgroundColor: 'var(--color-background)'}}></div>
-              <span style={{color: 'var(--color-primary)', fontSize: '0.8rem'}}>DOCUMENTÁRIO • 2019</span>
-              <h3>O Sucesso de "Catadores: Da Invisibilidade ao Protagonismo"</h3>
-              <p style={{color: 'var(--color-text-secondary)'}}>Como evidenciamos a vida real e as dores e forças dessas comunidades através do audiovisual...</p>
+            {/* FEATURED POST */}
+            <div className="glass-panel" style={{ padding: 32, marginBottom: 40, display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
+              <div style={{ flex: '1 1 400px', height: 320, borderRadius: 'var(--site-radius-md)', overflow: 'hidden', border: '1px solid var(--site-border)' }}>
+                <img src="/images/blog_destaque.png" alt="Featured Post" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+              <div style={{ flex: '1 1 400px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                  <span style={{ padding: '6px 12px', background: 'var(--site-primary-glow)', color: 'var(--site-primary)', fontSize: '0.75rem', fontWeight: 700, borderRadius: 100, letterSpacing: '0.05em' }}>NOVOS PROJETOS</span>
+                  <span style={{ color: 'var(--site-text-tertiary)', fontSize: '0.9rem', fontWeight: 500 }}>10 MAR 2024</span>
+                </div>
+                <h2 style={{ fontSize: '2rem', lineHeight: 1.2, marginBottom: 16 }}>Implantação de Quintais Agroecológicos apoiados pelo MDA do Governo Federal.</h2>
+                <p style={{ fontSize: '1.1rem', color: 'var(--site-text-secondary)', lineHeight: 1.6, marginBottom: 24 }}>
+                  Mais de dois projetos aprovados em grande escala para a implementação de novas Unidades de Conservação começam a impactar forte em 5 municípios diferentes.
+                </p>
+                <button className="btn btn-primary">Ler Artigo Completo</button>
+              </div>
             </div>
 
-            <div style={{display: 'flex', flexDirection: 'column', gap: '15px'}}>
-              <div style={{height: '220px', borderRadius: '12px', backgroundColor: 'var(--color-background)'}}></div>
-              <span style={{color: 'var(--color-primary)', fontSize: '0.8rem'}}>ECONOMIA SOLIDÁRIA • 2022</span>
-              <h3>Grupos de mulheres avançam criando produtos de alta renda</h3>
-              <p style={{color: 'var(--color-text-secondary)'}}>Sementes crioulas preservadas pelas mulheres do campo se tornam base para negócios sustentáveis...</p>
-            </div>
-
-            <div style={{display: 'flex', flexDirection: 'column', gap: '15px'}}>
-              <div style={{height: '220px', borderRadius: '12px', backgroundColor: 'var(--color-background)'}}></div>
-              <span style={{color: 'var(--color-primary)', fontSize: '0.8rem'}}>AÇÕES • 2024</span>
-              <h3>Início das turmas do Polo Técnico de Godofredo Viana</h3>
-              <p style={{color: 'var(--color-text-secondary)'}}>Iniciando com jovens locais buscando oportunidades através de parcerias com Prefeituras...</p>
+            {/* LISTING */}
+            <h3 style={{ fontSize: '1.6rem', marginBottom: 20 }}>Publicações Recentes</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
+              {posts.map((post, i) => (
+                <div key={i} className="glass-panel" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 20 }}>
+                  <div style={{ height: 180, borderRadius: 'var(--site-radius-sm)', marginBottom: 16, overflow: 'hidden', border: '1px solid var(--site-border)' }}>
+                    <img 
+                      src={`/images/${i === 0 ? 'blog_doc' : i === 1 ? 'blog_mulheres' : 'blog_destaque'}.png`} 
+                      alt={post.title} 
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                    />
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                    <span style={{ color: post.color, fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.05em' }}>{post.type}</span>
+                    <span style={{ color: 'var(--site-text-tertiary)', fontSize: '0.8rem' }}>• {post.date}</span>
+                  </div>
+                  <h4 style={{ fontSize: '1.4rem', marginBottom: 12, lineHeight: 1.3 }}>{post.title}</h4>
+                  <p style={{ color: 'var(--site-text-secondary)', fontSize: '0.95rem', lineHeight: 1.6 }}>{post.desc}</p>
+                </div>
+              ))}
             </div>
 
           </div>
-
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
+    </PublicLayout>
   );
 }

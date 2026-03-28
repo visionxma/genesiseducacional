@@ -1,54 +1,85 @@
+import PublicLayout from '../components/PublicLayout';
+import { GraduationCap, Award, Compass, Globe } from 'lucide-react';
+
 export const metadata = {
   title: 'Graduação e Pós | Instituto Gênesis',
 };
 
 export default function Graduacao() {
   return (
-    <main className="animate-fade-in-up">
-      <section className="bg-primary section-padding text-center">
-        <div className="container">
-          <h1 style={{fontSize: '3rem', color: '#fff', marginBottom: '20px'}}>Graduação e Pós-Graduação</h1>
-          <p style={{fontSize: '1.2rem', color: '#fff', opacity: 0.9, maxWidth: '600px', margin: '0 auto'}}>
-            O Instituto Gênesis conta com parcerias fortes e rede de organizações (OSC) pelo estado do Maranhão para facilitar o seu acesso ao ensino superior de qualidade.
-          </p>
-        </div>
-      </section>
-
-      <section className="bg-light section-padding">
-        <div className="container">
-          <div style={{display: 'flex', flexDirection: 'column', gap: '30px', alignItems: 'center'}}>
-            
-            <div style={{maxWidth: '800px', width: '100%', background: '#fff', padding: '40px', borderRadius: '16px', boxShadow: '0 2px 12px rgba(0,0,0,0.08)'}}>
-              <h2 style={{color: 'var(--color-primary)', marginBottom: '15px'}}>Benefícios de Estudar com Nossas Parcerias</h2>
-              <ul style={{listStyle: 'none', paddingLeft: 0, fontSize: '1.1rem', color: 'var(--color-text-secondary)', lineHeight: '1.8'}}>
-                <li>🎓 Acesso a bolsas e descontos exclusivos nas mensalidades.</li>
-                <li>🎯 Cursos alinhados com as demandas regionais do MA e PA.</li>
-                <li>📝 Suporte da equipe Gênesis durante sua matrícula.</li>
-                <li>🌐 Possibilidade de engajar em projetos sociais acadêmicos.</li>
-              </ul>
+    <PublicLayout>
+      <main className="animate-fade-up">
+        {/* HERO */}
+        <section style={{ 
+          position: 'relative', overflow: 'hidden', padding: '60px 0 80px',
+          background: 'linear-gradient(180deg, var(--site-bg) 0%, var(--site-surface-alt) 100%)',
+          textAlign: 'center'
+        }}>
+          <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 16px', background: 'var(--site-surface)', border: '1px solid var(--site-border)', borderRadius: 100, fontSize: '0.85rem', fontWeight: 600, color: 'var(--site-primary)', marginBottom: 20, boxShadow: 'var(--site-shadow-sm)' }}>
+              <GraduationCap size={14} /> Ensino Superior
             </div>
+            <h1 style={{ maxWidth: 900, margin: '0 auto 16px' }}>
+              <span style={{ color: 'var(--site-primary)' }}>Graduação</span> e Pós-Graduação
+            </h1>
+            <p style={{ maxWidth: 680, margin: '0 auto', fontSize: '1.25rem', color: 'var(--site-text-secondary)', lineHeight: 1.6 }}>
+              Parcerias fortes com uma rede de organizações pelo Maranhão para facilitar o seu acesso ao ensino superior de qualidade certificada.
+            </p>
+          </div>
+        </section>
 
-            <div style={{maxWidth: '800px', width: '100%'}}>
-              <h3 style={{fontSize: '2rem', marginBottom: '20px', marginTop: '40px'}}>Cursos em Destaque</h3>
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px'}}>
-                <div style={{background: '#fff', padding: '20px', borderRadius: '12px', boxShadow: '0 2px 12px rgba(0,0,0,0.08)'}}>
-                  <h4 style={{fontSize: '1.3rem', marginBottom: '8px'}}>Pedagogia</h4>
-                  <p style={{color: 'var(--color-text-secondary)'}}>Licenciatura e especializações.</p>
+        <section className="section-padding" style={{ background: 'var(--site-surface)' }}>
+          <div className="container">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 40, alignItems: 'center' }}>
+              
+              {/* Benefícios */}
+              <div className="glass-panel" style={{ maxWidth: 900, width: '100%', padding: '32px 40px', display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
+                <div style={{ flex: '1 1 300px' }}>
+                  <h2 style={{ fontSize: '1.8rem', marginBottom: 16 }}>Benefícios da Nossa Rede</h2>
+                  <p style={{ color: 'var(--site-text-secondary)', fontSize: '1.05rem', marginBottom: 20 }}>
+                    Nossos polos oferecem estrutura e programas de financiamento focados em democratizar o acesso à universidade para jovens do campo e da periferia.
+                  </p>
+                  <button className="btn btn-primary">Fazer Inscrição no Processo</button>
                 </div>
-                <div style={{background: '#fff', padding: '20px', borderRadius: '12px', boxShadow: '0 2px 12px rgba(0,0,0,0.08)'}}>
-                  <h4 style={{fontSize: '1.3rem', marginBottom: '8px'}}>Gestão Ambiental</h4>
-                  <p style={{color: 'var(--color-text-secondary)'}}>Foco em conservação e desenvolvimento.</p>
-                </div>
-                <div style={{background: '#fff', padding: '20px', borderRadius: '12px', boxShadow: '0 2px 12px rgba(0,0,0,0.08)'}}>
-                  <h4 style={{fontSize: '1.3rem', marginBottom: '8px'}}>Serviço Social</h4>
-                  <p style={{color: 'var(--color-text-secondary)'}}>Práticas para o terceiro setor e políticas públicas.</p>
+                <div style={{ flex: '1 1 300px' }}>
+                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 16 }}>
+                    {[
+                      { icon: Award, text: "Acesso a bolsas e descontos exclusivos nas mensalidades." },
+                      { icon: Compass, text: "Cursos alinhados com as demandas regionais do MA e PA." },
+                      { icon: Globe, text: "Projeto acadêmico com aplicabilidade social imediata." }
+                    ].map((item, i) => (
+                      <li key={i} style={{ display: 'flex', gap: 12, alignItems: 'center', fontSize: '1rem', fontWeight: 500 }}>
+                        <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--site-primary-glow)', color: 'var(--site-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <item.icon size={20} />
+                        </div>
+                        {item.text}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            </div>
 
+              {/* Courses List */}
+              <div style={{ maxWidth: 900, width: '100%' }}>
+                <h2 style={{ fontSize: '1.8rem', marginBottom: 24, textAlign: 'center' }}>Cursos em Destaque</h2>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 20 }}>
+                  {[
+                    { title: "Pedagogia", desc: "Licenciatura e práticas de educação popular.", color: "#8B5CF6" },
+                    { title: "Gestão Ambiental", desc: "Foco em conservação, ESG e desenvolvimento.", color: "#10B981" },
+                    { title: "Serviço Social", desc: "Práticas públicas e gestão do terceiro setor.", color: "#F59E0B" }
+                  ].map((course, i) => (
+                    <div key={i} className="glass-panel" style={{ padding: 24, borderTop: `4px solid ${course.color}` }}>
+                      <h3 style={{ fontSize: '1.3rem', marginBottom: 8 }}>{course.title}</h3>
+                      <p style={{ color: 'var(--site-text-secondary)', lineHeight: 1.5 }}>{course.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
+    </PublicLayout>
   );
 }

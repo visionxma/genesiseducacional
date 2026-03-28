@@ -1,0 +1,250 @@
+'use client';
+import { supabase } from '@/lib/supabase';
+import { useRouter, usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import {
+  LayoutDashboard,
+  FileText,
+  Tag,
+  Image as ImageIcon,
+  Search,
+  Settings,
+  LogOut,
+  ChevronRight,
+  Menu,
+  X,
+  User,
+  Moon,
+  Sun,
+  Users,
+} from 'lucide-react';
+import './admin.css';
+import AdminSearch from './AdminSearch';
+
+/**
+ * Layout Administrativo Premium — Instituto Gênesis
+ * App Shell com Sidebar Glassmorphism, Header Sticky e Micro-interações
+ */
+
+const navItems = [
+  { label: 'Visão Geral', path: '/admin/dashboard', icon: LayoutDashboard, section: 'Principal' },
+  { label: 'Postagens', path: '/admin/dashboard/posts', icon: FileText, section: 'Principal' },
+  { label: 'Categorias', path: '/admin/dashboard/categories', icon: Tag, section: 'Conteúdo' },
+  { label: 'Mídia / Imagens', path: '/admin/dashboard/media', icon: ImageIcon, section: 'Conteúdo' },
+  { label: 'Configurações', path: '/admin/dashboard/settings', icon: Settings, section: 'Sistema' },
+];
+
+function getBreadcrumb(path: string) {
+  const map: Record<string, string> = {
+    '/admin/dashboard': 'Visão Geral',
+    '/admin/dashboard/posts': 'Postagens',
+    '/admin/dashboard/categories': 'Categorias',
+    '/admin/dashboard/media': 'Mídia',
+    '/admin/dashboard/settings': 'Configurações',
+  };
+  return map[path] || 'Dashboard';
+}
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const currentPath = usePathname();
+  const [session, setSession] = useState<any>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [currentTime, setCurrentTime] = useState('');
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        // router.push('/admin'); // Proteção de rota — reativar em produção
+      }
+      setSession(session);
+    });
+
+    // Check system preference or saved theme
+    const savedTheme = localStorage.getItem('admin-theme') as 'light' | 'dark';
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+  }, [router]);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('admin-theme', newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+  };
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      setCurrentTime(
+        now.toLocaleDateString('pt-BR', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        })
+      );
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const sections = navItems.reduce((acc, item) => {
+    if (!acc[item.section]) acc[item.section] = [];
+    acc[item.section].push(item);
+    return acc;
+  }, {} as Record<string, typeof navItems>);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push('/admin');
+  };
+
+  return (
+    <div className="admin-shell">
+      {/* ──── Sidebar ──── */}
+      <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
+        <div className="sidebar-brand">
+          <div className="sidebar-brand-title">
+            GÊNESIS<span className="sidebar-brand-dot">.</span> ADMIN
+          </div>
+          <div className="sidebar-brand-subtitle">Gestão Institucional</div>
+        </div>
+
+        <nav className="sidebar-nav">
+          {Object.entries(sections).map(([section, items]) => (
+            <div key={section} className="sidebar-nav-section">
+              <div className="sidebar-nav-label">{section}</div>
+              {items.map((item) => {
+                const Icon = item.icon;
+                const isActive = currentPath === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    href={item.path}
+                    className={`sidebar-nav-item ${isActive ? 'active' : ''}`}
+                    onClick={() => setSidebarOpen(false)}
+                  >
+                    <Icon className="sidebar-nav-icon" size={20} strokeWidth={isActive ? 2.2 : 1.8} />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
+          ))}
+        </nav>
+
+        <div className="sidebar-footer">
+          <button onClick={handleLogout} className="sidebar-logout-btn">
+            <LogOut size={16} />
+            Sair do Sistema
+          </button>
+        </div>
+      </aside>
+
+      {/* ──── Main Content ──── */}
+      <div className="admin-main">
+        {/* Header */}
+        <header className="admin-header">
+          <div className="admin-header-left">
+            <button
+              className="admin-header-icon-btn mobile-menu-btn"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              aria-label="Menu"
+            >
+              {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+
+            <div className="admin-header-breadcrumb">
+              <span>Dashboard</span>
+              <ChevronRight size={14} className="admin-header-breadcrumb-separator" />
+              <span className="admin-header-breadcrumb-active">{getBreadcrumb(currentPath)}</span>
+            </div>
+          </div>
+
+          <div className="admin-header-right">
+            <AdminSearch />
+
+            {/* Profile Dropdown (Replaced Notification Bell) */}
+            <div style={{ position: 'relative' }}>
+              <button 
+                className={`admin-header-icon-btn ${userMenuOpen ? 'active' : ''}`} 
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                aria-label="Perfil do Usuário"
+              >
+                <User size={18} />
+                <span className="notification-dot"></span>
+              </button>
+
+              {userMenuOpen && (
+                <div className="user-dropdown">
+                  <div className="user-dropdown-header">
+                    <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--admin-text-primary)' }}>
+                      {session?.user?.email || 'Administrador'}
+                    </div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--admin-text-tertiary)', marginTop: 2 }}>
+                      Gênesis Admin Access
+                    </div>
+                  </div>
+
+                  <button className="user-dropdown-item" onClick={toggleTheme}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+                      <span>Tema {theme === 'light' ? 'Escuro' : 'Claro'}</span>
+                    </div>
+                  </button>
+
+                  <button className="user-dropdown-item" onClick={() => router.push('/admin')}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <Users size={16} />
+                      <span>Trocar de conta</span>
+                    </div>
+                  </button>
+
+                  <button className="user-dropdown-item" onClick={() => router.push('/admin/dashboard/settings')}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <Settings size={16} />
+                      <span>Configurações</span>
+                    </div>
+                  </button>
+
+                  <div style={{ borderTop: '1px solid var(--admin-border)', margin: '4px 0', paddingTop: 4 }}>
+                    <button className="user-dropdown-item" onClick={handleLogout} style={{ color: 'var(--admin-danger)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <LogOut size={16} />
+                        <span>Sair</span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <main key={currentPath} className="admin-page-content admin-page-transition">
+          {/* Page Title Row (dynamic per page via children) */}
+          <div className="admin-page-title-row">
+            <div>
+              <h1 className="admin-page-title">{getBreadcrumb(currentPath)}</h1>
+              <p className="admin-page-subtitle">
+                {currentTime && (
+                  <span style={{ textTransform: 'capitalize' }}>{currentTime}</span>
+                )}
+              </p>
+            </div>
+          </div>
+
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}
