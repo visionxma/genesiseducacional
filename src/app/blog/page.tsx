@@ -14,9 +14,9 @@ export default function Blog() {
 
   return (
     <PublicLayout>
-      <main className="animate-fade-up">
+      <main className="animate-fade-up" style={{ background: 'var(--site-bg)' }}>
         {/* HEADER */}
-        <section style={{ borderBottom: '1px solid var(--site-border)', padding: '30px 0', background: 'var(--site-surface)' }}>
+        <section className="glass-section-white" style={{ padding: '100px 0 40px', textAlign: 'center' }}>
           <div className="container" style={{ textAlign: 'center' }}>
             <h1 style={{ fontSize: '3rem', marginBottom: 12 }}>Notícias e Relatos</h1>
             <p style={{ fontSize: '1.1rem', color: 'var(--site-text-secondary)' }}>Acompanhe os projetos, histórias e o impacto das ações do Instituto Gênesis.</p>
@@ -24,7 +24,7 @@ export default function Blog() {
         </section>
 
         {/* POSTS GRID */}
-        <section className="section-padding" style={{ background: 'var(--site-bg)' }}>
+        <section className="glass-section-white" style={{ borderTop: 'none', padding: '80px 0' }}>
           <div className="container">
             
             {/* FEATURED POST */}
@@ -34,7 +34,7 @@ export default function Blog() {
               </div>
               <div style={{ flex: '1 1 400px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                  <span style={{ padding: '6px 12px', background: 'var(--site-primary-glow)', color: 'var(--site-primary)', fontSize: '0.75rem', fontWeight: 700, borderRadius: 100, letterSpacing: '0.05em' }}>NOVOS PROJETOS</span>
+                  <span style={{ padding: '6px 12px', background: 'var(--site-primary-glow)', color: 'var(--site-primary)', fontSize: '0.75rem', fontWeight: 700, borderRadius: 0, letterSpacing: '0.05em' }}>NOVOS PROJETOS</span>
                   <span style={{ color: 'var(--site-text-tertiary)', fontSize: '0.9rem', fontWeight: 500 }}>10 MAR 2024</span>
                 </div>
                 <h2 style={{ fontSize: '2rem', lineHeight: 1.2, marginBottom: 16 }}>Implantação de Quintais Agroecológicos apoiados pelo MDA do Governo Federal.</h2>

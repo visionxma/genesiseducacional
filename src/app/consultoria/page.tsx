@@ -14,12 +14,10 @@ export default function Consultoria() {
 
   return (
     <PublicLayout>
-      <main className="animate-fade-up">
+      <main className="animate-fade-up" style={{ background: 'var(--site-bg)' }}>
         {/* HERO */}
-        <section style={{ 
-          position: 'relative', overflow: 'hidden', padding: '80px 0 100px',
-          background: 'linear-gradient(135deg, var(--site-surface-alt) 0%, var(--site-bg) 100%)',
-          borderBottom: '1px solid var(--site-border)',
+        <section className="glass-section-white" style={{ 
+          position: 'relative', overflow: 'hidden', padding: '100px 0 100px',
           textAlign: 'center'
         }}>
           <div className="container" style={{ position: 'relative', zIndex: 1 }}>
@@ -36,7 +34,7 @@ export default function Consultoria() {
         </section>
 
         {/* METODOLOGIA */}
-        <section className="section-padding" style={{ background: 'var(--site-bg)' }}>
+        <section className="glass-section-white" style={{ borderTop: 'none', padding: '80px 0' }}>
           <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
             {steps.map((step, i) => {
               const Icon = step.icon;

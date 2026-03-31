@@ -15,15 +15,14 @@ export default function Cursos() {
 
   return (
     <PublicLayout>
-      <main className="animate-fade-up">
+      <main className="animate-fade-up" style={{ background: 'var(--site-bg)' }}>
         {/* HERO */}
-        <section style={{ 
-          position: 'relative', overflow: 'hidden', padding: '60px 0 80px',
-          background: 'linear-gradient(180deg, var(--site-bg) 0%, var(--site-surface-alt) 100%)',
+        <section className="glass-section-white" style={{ 
+          position: 'relative', overflow: 'hidden', padding: '100px 0 80px',
           textAlign: 'center'
         }}>
           <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 16px', background: 'var(--site-surface)', border: '1px solid var(--site-border)', borderRadius: 100, fontSize: '0.85rem', fontWeight: 600, color: 'var(--site-primary)', marginBottom: 20, boxShadow: 'var(--site-shadow-sm)' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 16px', background: 'var(--site-surface)', border: '1px solid var(--site-border)', borderRadius: 0, fontSize: '0.85rem', fontWeight: 600, color: 'var(--site-primary)', marginBottom: 20, boxShadow: 'var(--site-shadow-sm)' }}>
               <BookOpen size={14} /> Cursos de Capacitação
             </div>
             <h1 style={{ maxWidth: 900, margin: '0 auto 16px' }}>
@@ -36,11 +35,11 @@ export default function Cursos() {
         </section>
 
         {/* CURSOS GRID */}
-        <section className="section-padding" style={{ background: 'var(--site-surface)' }}>
+        <section className="glass-section-white" style={{ borderTop: 'none', padding: '80px 0' }}>
           <div className="container">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, flexWrap: 'wrap', gap: 16 }}>
               <h2 style={{ fontSize: '2rem' }}>Explorar Categorias</h2>
-              <select style={{ padding: '12px 20px', borderRadius: 'var(--site-radius-full)', border: '1px solid var(--site-border)', background: 'var(--site-bg)', fontFamily: 'var(--font-inter)', fontSize: '0.95rem', fontWeight: 500, color: 'var(--site-text-primary)', outline: 'none', cursor: 'pointer', boxShadow: 'var(--site-shadow-sm)' }}>
+              <select style={{ padding: '12px 20px', borderRadius: 0, border: '1px solid var(--site-border)', background: 'var(--site-bg)', fontFamily: 'var(--font-inter)', fontSize: '0.95rem', fontWeight: 500, color: 'var(--site-text-primary)', outline: 'none', cursor: 'pointer', boxShadow: 'var(--site-shadow-sm)' }}>
                 <option>Todos os cursos</option>
                 <option>Agricultura</option>
                 <option>Inovação</option>
@@ -54,7 +53,7 @@ export default function Cursos() {
                 return (
                   <div key={i} className="glass-panel" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                     <div style={{ height: 180, background: 'var(--site-bg)', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <div style={{ width: 64, height: 64, borderRadius: '50%', background: `${curso.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: curso.color }}>
+                      <div style={{ width: 64, height: 64, borderRadius: 0, background: `${curso.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: curso.color }}>
                         <Icon size={32} strokeWidth={1.5} />
                       </div>
                     </div>

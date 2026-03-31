@@ -14,12 +14,10 @@ export default function Tecnicos() {
 
   return (
     <PublicLayout>
-      <main className="animate-fade-up">
+      <main className="animate-fade-up" style={{ background: 'var(--site-bg)' }}>
         {/* HERO */}
-        <section style={{ 
-          position: 'relative', overflow: 'hidden', padding: '60px 0 80px',
-          background: 'var(--site-surface-alt)',
-          borderBottom: '1px solid var(--site-border)',
+        <section className="glass-section-white" style={{ 
+          position: 'relative', overflow: 'hidden', padding: '100px 0 80px',
           textAlign: 'center'
         }}>
           <div className="container" style={{ position: 'relative', zIndex: 1 }}>
@@ -33,7 +31,7 @@ export default function Tecnicos() {
         </section>
 
         {/* LIST */}
-        <section className="section-padding" style={{ background: 'var(--site-bg)' }}>
+        <section className="glass-section-white" style={{ borderTop: 'none', padding: '80px 0' }}>
           <div className="container">
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 20 }}>
               {cursosRef.map((curso, i) => {

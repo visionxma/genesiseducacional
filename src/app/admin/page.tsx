@@ -43,29 +43,81 @@ export default function AdminLogin() {
   };
 
   return (
-    <main className="bg-dark" style={{minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#0D0C1B'}}>
-      <div style={{width: '100%', maxWidth: '450px', backgroundColor: '#131224', padding: '40px', borderRadius: '20px', boxShadow: '0 20px 40px rgba(0,0,0,0.5)', border: '1px solid #1f1e36', color: '#fff'}}>
-        <div style={{textAlign: 'center', marginBottom: '30px'}}>
-          <h1 style={{fontSize: '2rem', color: '#fff', marginBottom: '10px'}}>Gênesis Admin</h1>
-          <p style={{color: '#737373'}}>Acesse a plataforma de gestão de conteúdos do instituto.</p>
+    <main style={{ 
+      minHeight: '100vh', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      backgroundColor: 'var(--site-bg)',
+      backgroundImage: "url('/texture.svg')",
+      backgroundSize: '300px'
+    }}>
+      <div style={{
+        width: '100%', 
+        maxWidth: '440px', 
+        backgroundColor: 'var(--site-surface)', 
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        padding: '60px 40px', 
+        borderRadius: 0, 
+        border: '1px solid var(--site-border)',
+        boxShadow: 'var(--site-shadow-glass)',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Accent Bar */}
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: 'var(--site-primary)' }} />
+
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <div style={{ 
+            fontSize: '0.75rem', 
+            fontWeight: 800, 
+            letterSpacing: '0.2em', 
+            color: 'var(--site-primary)', 
+            textTransform: 'uppercase', 
+            marginBottom: 16 
+          }}>
+            Acesso Restrito
+          </div>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--site-text-primary)', marginBottom: '8px', letterSpacing: '-0.02em' }}>
+            Gênesis <span style={{ color: 'var(--site-primary)' }}>Admin</span>
+          </h1>
+          <p style={{ color: 'var(--site-text-secondary)', fontSize: '0.95rem' }}>
+            Gerencie o conteúdo institucional com precisão.
+          </p>
         </div>
 
-        <form onSubmit={handleLogin} style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
-          <div style={{display: 'flex', flexDirection: 'column', gap: '8px'}}>
-            <label htmlFor="email" style={{fontSize: '0.9rem', color: '#ccc'}}>Email</label>
+        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label htmlFor="email" style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--site-text-primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Identificador (Email)
+            </label>
             <input 
               type="email" 
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="seuemail@genesis.org.br"
+              placeholder="admin@genesis.org.br"
               required
-              style={{padding: '12px 16px', borderRadius: '8px', border: '1px solid #2A3EF3', backgroundColor: '#0D0C1B', color: '#fff', outline: 'none'}}
+              style={{ 
+                padding: '14px 16px', 
+                borderRadius: 0, 
+                border: '1px solid var(--site-border)', 
+                backgroundColor: 'white', 
+                color: 'var(--site-text-primary)', 
+                fontSize: '1rem',
+                outline: 'none',
+                transition: 'border-color 0.2s ease'
+              }}
+              onFocus={e => e.currentTarget.style.borderColor = 'var(--site-primary)'}
+              onBlur={e => e.currentTarget.style.borderColor = 'var(--site-border)'}
             />
           </div>
 
-          <div style={{display: 'flex', flexDirection: 'column', gap: '8px'}}>
-            <label htmlFor="password" style={{fontSize: '0.9rem', color: '#ccc'}}>Senha</label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label htmlFor="password" style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--site-text-primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Senha Segura
+            </label>
             <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
               <input 
                 type={showPassword ? "text" : "password"} 
@@ -74,20 +126,32 @@ export default function AdminLogin() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                style={{ width: '100%', padding: '12px 16px', paddingRight: '46px', borderRadius: '8px', border: '1px solid #333', backgroundColor: '#0D0C1B', color: '#fff', outline: 'none' }}
+                style={{ 
+                  width: '100%', 
+                  padding: '14px 16px', 
+                  paddingRight: '46px', 
+                  borderRadius: 0, 
+                  border: '1px solid var(--site-border)', 
+                  backgroundColor: 'white', 
+                  color: 'var(--site-text-primary)', 
+                  fontSize: '1rem',
+                  outline: 'none' 
+                }}
+                onFocus={e => e.currentTarget.style.borderColor = 'var(--site-primary)'}
+                onBlur={e => e.currentTarget.style.borderColor = 'var(--site-border)'}
               />
               <button 
                 type="button" 
                 onClick={() => setShowPassword(!showPassword)}
-                style={{ position: 'absolute', right: '12px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', padding: '4px', opacity: 0.6 }}
+                style={{ position: 'absolute', right: '12px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', padding: '4px', opacity: 0.5 }}
               >
                 {showPassword ? (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
                   </svg>
                 ) : (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                     <line x1="1" y1="1" x2="23" y2="23"></line>
                   </svg>
@@ -99,14 +163,22 @@ export default function AdminLogin() {
           <button 
             type="submit" 
             disabled={loading}
-            style={{ width: '100%', marginTop: '10px', fontSize: '1.1rem', backgroundColor: '#2A3EF3', color: '#fff', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}
+            className="btn btn-primary"
+            style={{ 
+              width: '100%', 
+              marginTop: '10px', 
+              fontSize: '1rem', 
+              padding: '16px', 
+              borderRadius: 0,
+              cursor: loading ? 'not-allowed' : 'pointer'
+            }}
           >
-            {loading ? 'Autenticando...' : 'Autenticar via Supabase'}
+            {loading ? 'Autenticando...' : 'Entrar no Sistema'}
           </button>
         </form>
 
-        <p style={{textAlign: 'center', marginTop: '20px', color: '#737373', fontSize: '0.85rem'}}>
-          Painel de integração CMS - Versão 1.2
+        <p style={{ textAlign: 'center', marginTop: '32px', color: 'var(--site-text-tertiary)', fontSize: '0.8rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          Plataforma Gênesis — v1.5
         </p>
       </div>
     </main>

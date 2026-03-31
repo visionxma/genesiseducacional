@@ -8,15 +8,14 @@ export const metadata = {
 export default function Graduacao() {
   return (
     <PublicLayout>
-      <main className="animate-fade-up">
+      <main className="animate-fade-up" style={{ background: 'var(--site-bg)' }}>
         {/* HERO */}
-        <section style={{ 
-          position: 'relative', overflow: 'hidden', padding: '60px 0 80px',
-          background: 'linear-gradient(180deg, var(--site-bg) 0%, var(--site-surface-alt) 100%)',
+        <section className="glass-section-white" style={{ 
+          position: 'relative', overflow: 'hidden', padding: '100px 0 80px',
           textAlign: 'center'
         }}>
           <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 16px', background: 'var(--site-surface)', border: '1px solid var(--site-border)', borderRadius: 100, fontSize: '0.85rem', fontWeight: 600, color: 'var(--site-primary)', marginBottom: 20, boxShadow: 'var(--site-shadow-sm)' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 16px', background: 'var(--site-surface)', border: '1px solid var(--site-border)', borderRadius: 0, fontSize: '0.85rem', fontWeight: 600, color: 'var(--site-primary)', marginBottom: 20, boxShadow: 'var(--site-shadow-sm)' }}>
               <GraduationCap size={14} /> Ensino Superior
             </div>
             <h1 style={{ maxWidth: 900, margin: '0 auto 16px' }}>
@@ -28,7 +27,7 @@ export default function Graduacao() {
           </div>
         </section>
 
-        <section className="section-padding" style={{ background: 'var(--site-surface)' }}>
+        <section className="glass-section-white" style={{ borderTop: 'none', padding: '80px 0' }}>
           <div className="container">
             <div style={{ display: 'flex', flexDirection: 'column', gap: 40, alignItems: 'center' }}>
               
@@ -49,7 +48,7 @@ export default function Graduacao() {
                       { icon: Globe, text: "Projeto acadêmico com aplicabilidade social imediata." }
                     ].map((item, i) => (
                       <li key={i} style={{ display: 'flex', gap: 12, alignItems: 'center', fontSize: '1rem', fontWeight: 500 }}>
-                        <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--site-primary-glow)', color: 'var(--site-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <div style={{ width: 40, height: 40, borderRadius: 0, background: 'var(--site-primary-glow)', color: 'var(--site-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                           <item.icon size={20} />
                         </div>
                         {item.text}

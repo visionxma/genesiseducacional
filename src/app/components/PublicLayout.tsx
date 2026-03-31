@@ -13,13 +13,25 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
     <>
       <header
         style={{
-          position: 'sticky',
-          top: 0,
+          position: 'fixed',
+          top: 12,
           zIndex: 100,
-          background: 'var(--site-glass-bg)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          borderBottom: '1px solid var(--site-border)',
+          maxWidth: 1200,
+          width: 'calc(100% - 24px)',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: 'var(--site-primary)',
+          backgroundImage: `
+            linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)
+          `,
+          backgroundRepeat: 'repeat',
+          backgroundSize: '40px 40px',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          borderRadius: 0,
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          boxShadow: '0 4px 24px rgba(0, 68, 204, 0.25)',
           transition: 'all 0.3s ease',
         }}
       >
@@ -27,28 +39,28 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          height: '80px',
+          height: '56px',
         }}>
           {/* LOGO */}
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{
               width: 36, height: 36,
-              background: 'linear-gradient(135deg, var(--site-primary), #1A1933)',
+              background: 'rgba(255, 255, 255, 0.2)',
               borderRadius: '10px',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               color: 'white', fontWeight: 800, fontSize: '1.2rem',
-              boxShadow: '0 4px 12px var(--site-primary-glow)'
+              border: '1px solid rgba(255,255,255,0.3)'
             }}>
               G
             </div>
             <div style={{
               fontWeight: 800,
-              color: 'var(--site-text-primary)',
+              color: 'white',
               fontSize: '1.4rem',
               fontFamily: 'var(--font-outfit)',
               letterSpacing: '-0.02em',
             }}>
-              GÊNESIS<span style={{ color: 'var(--site-primary)' }}>.</span>
+              GÊNESIS<span style={{ color: 'rgba(255,255,255,0.6)' }}>.</span>
             </div>
           </Link>
 
@@ -56,10 +68,10 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           <nav
             style={{
               display: 'none',
-              gap: '32px',
+              gap: '28px',
               fontWeight: 500,
               fontSize: '0.95rem',
-              color: 'var(--site-text-secondary)',
+              color: 'rgba(255,255,255,0.85)',
             }}
             className="md-flex"
           >
@@ -75,8 +87,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                 key={item.path}
                 href={item.path}
                 style={{
-                  color: isActive(item.path) ? 'var(--site-primary)' : 'inherit',
-                  fontWeight: isActive(item.path) ? 600 : 500,
+                  color: isActive(item.path) ? 'white' : 'rgba(255,255,255,0.75)',
+                  fontWeight: isActive(item.path) ? 700 : 500,
                   transition: 'color 0.2s',
                   position: 'relative'
                 }}
@@ -84,8 +96,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                 {item.label}
                 {isActive(item.path) && (
                   <div style={{
-                    position: 'absolute', bottom: -28, left: 0, right: 0,
-                    height: 3, background: 'var(--site-primary)',
+                    position: 'absolute', bottom: -16, left: 0, right: 0,
+                    height: 3, background: 'white',
                     borderRadius: '4px 4px 0 0'
                   }} />
                 )}
@@ -109,8 +121,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
       </div>
 
       <footer
+        className="glass-section-white"
         style={{
-          backgroundColor: 'var(--site-surface-alt)',
           borderTop: '1px solid var(--site-border)',
           padding: '80px 0 40px',
         }}
@@ -134,7 +146,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             <div style={{ display: 'flex', gap: 12 }}>
               {[BookOpen, GraduationCap, Users].map((Icon, i) => (
                 <div key={i} style={{ 
-                  width: 40, height: 40, borderRadius: '50%',
+                  width: 40, height: 40, borderRadius: 0,
                   background: 'var(--site-surface)', border: '1px solid var(--site-border)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   color: 'var(--site-text-secondary)', cursor: 'pointer'
