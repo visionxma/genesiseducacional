@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
-import { ArrowRight, BookOpen, GraduationCap, Users, LayoutDashboard } from "lucide-react";
+import { ArrowRight, BookOpen, GraduationCap, Users } from "lucide-react";
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -94,14 +94,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           </nav>
 
           {/* ACTIONS */}
-          <div style={{ display: 'flex', gap: 16 }}>
-            <Link href="/admin">
-              <button className="btn btn-primary" style={{ padding: '10px 20px', fontSize: '0.9rem' }}>
-                <LayoutDashboard size={16} />
-                Portal do Aluno
-              </button>
-            </Link>
-          </div>
+          <div style={{ display: 'flex', gap: 16 }}></div>
         </div>
         
         {/* Helper class inline specifically for this layout */}
