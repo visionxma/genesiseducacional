@@ -2,8 +2,16 @@ import PublicLayout from '../components/PublicLayout';
 import Link from 'next/link';
 import { BookOpen, Sprout, Lightbulb, HeartHandshake, ArrowRight } from 'lucide-react';
 
-export const metadata = {
-  title: 'Cursos | Instituto Gênesis',
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Cursos de Capacitação Profissional',
+  description: 'Cursos de capacitação em agroecologia, gestão de projetos sociais e empreendedorismo para comunidades do Maranhão e Pará. Educação prática e transformadora.',
+  openGraph: {
+    title: 'Cursos de Capacitação | Instituto Gênesis Educacional',
+    description: 'Cursos de capacitação em agroecologia, gestão social e empreendedorismo. Educação prática para comunidades do Maranhão e Pará.',
+    url: '/cursos',
+  },
 };
 
 export default function Cursos() {

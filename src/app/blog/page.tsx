@@ -1,8 +1,16 @@
 import PublicLayout from '../components/PublicLayout';
 import Link from 'next/link';
 
-export const metadata = {
-  title: 'Blog Institucional | Instituto Gênesis',
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Blog — Notícias e Relatos',
+  description: 'Acompanhe projetos, histórias de impacto e ações do Instituto Gênesis Educacional nas comunidades do Maranhão e Pará.',
+  openGraph: {
+    title: 'Blog | Instituto Gênesis Educacional',
+    description: 'Notícias, documentários e relatos de impacto das ações do Instituto Gênesis nas comunidades.',
+    url: '/blog',
+  },
 };
 
 export default function Blog() {

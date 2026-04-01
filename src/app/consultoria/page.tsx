@@ -1,8 +1,16 @@
 import PublicLayout from '../components/PublicLayout';
 import { Search, PenTool, Users, ArrowRight } from 'lucide-react';
 
-export const metadata = {
-  title: 'Consultoria Pedagógica | Instituto Gênesis',
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Consultoria Estratégica Educacional',
+  description: 'Consultoria pedagógica para prefeituras, OSCs e instituições. Diagnóstico, planejamento metodológico e acompanhamento técnico para projetos de impacto social.',
+  openGraph: {
+    title: 'Consultoria Educacional | Instituto Gênesis Educacional',
+    description: 'Soluções educacionais para prefeituras e instituições. Diagnóstico, planejamento e acompanhamento técnico de projetos sociais.',
+    url: '/consultoria',
+  },
 };
 
 export default function Consultoria() {

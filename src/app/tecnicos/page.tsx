@@ -1,8 +1,16 @@
 import PublicLayout from '../components/PublicLayout';
 import { ArrowRight, Wrench, Laptop, Anchor } from 'lucide-react';
 
-export const metadata = {
-  title: 'Cursos Técnicos | Instituto Gênesis',
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Cursos Técnicos e Profissionalizantes',
+  description: 'Cursos técnicos em agropecuária, informática e gestão na pesca artesanal. Formação profissional para empregabilidade imediata no Maranhão e Pará.',
+  openGraph: {
+    title: 'Cursos Técnicos | Instituto Gênesis Educacional',
+    description: 'Técnico em Agropecuária, Informática e Gestão na Pesca Artesanal. Formação profissional para a juventude rural.',
+    url: '/tecnicos',
+  },
 };
 
 export default function Tecnicos() {
