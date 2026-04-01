@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
-import { ArrowRight, BookOpen, GraduationCap, Users } from "lucide-react";
+import { ArrowRight, BookOpen, Wrench, Users } from "lucide-react";
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -42,26 +42,12 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           height: '56px',
         }}>
           {/* LOGO */}
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{
-              width: 36, height: 36,
-              background: 'rgba(255, 255, 255, 0.2)',
-              borderRadius: '10px',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'white', fontWeight: 800, fontSize: '1.2rem',
-              border: '1px solid rgba(255,255,255,0.3)'
-            }}>
-              G
-            </div>
-            <div style={{
-              fontWeight: 800,
-              color: 'white',
-              fontSize: '1.4rem',
-              fontFamily: 'var(--font-outfit)',
-              letterSpacing: '-0.02em',
-            }}>
-              GÊNESIS<span style={{ color: 'rgba(255,255,255,0.6)' }}>.</span>
-            </div>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
+            <img
+              src="/logo.PNG"
+              alt="Instituto Gênesis"
+              style={{ height: 40, width: 'auto', objectFit: 'contain' }}
+            />
           </Link>
 
           {/* DESKTOP NAV */}
@@ -78,7 +64,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             {[
               { label: 'Início', path: '/' },
               { label: 'Cursos', path: '/cursos' },
-              { label: 'Graduação/Pós', path: '/graduacao' },
+              { label: 'Pós-Técnico', path: '/tecnicos' },
               { label: 'Técnicos', path: '/tecnicos' },
               { label: 'Consultoria', path: '/consultoria' },
               { label: 'Blog', path: '/blog' },
@@ -133,18 +119,18 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         }}>
           {/* Brand Col */}
           <div>
-            <div style={{
-              fontWeight: 800, color: 'var(--site-text-primary)',
-              fontSize: '1.4rem', fontFamily: 'var(--font-outfit)', 
-              marginBottom: 20
-            }}>
-              GÊNESIS<span style={{ color: 'var(--site-primary)' }}>.</span>
+            <div style={{ marginBottom: 20 }}>
+              <img
+                src="/logo.PNG"
+                alt="Instituto Gênesis"
+                style={{ height: 44, width: 'auto', objectFit: 'contain', filter: 'brightness(0) saturate(100%)' }}
+              />
             </div>
             <p style={{ color: 'var(--site-text-secondary)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: 24, maxWidth: 300 }}>
               Formação, Inovação e Desenvolvimento Social para comunidades do Maranhão e Pará desde 2013.
             </p>
             <div style={{ display: 'flex', gap: 12 }}>
-              {[BookOpen, GraduationCap, Users].map((Icon, i) => (
+              {[BookOpen, Wrench, Users].map((Icon, i) => (
                 <div key={i} style={{ 
                   width: 40, height: 40, borderRadius: 0,
                   background: 'var(--site-surface)', border: '1px solid var(--site-border)',
@@ -174,7 +160,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12, color: 'var(--site-text-secondary)', fontSize: '0.95rem' }}>
               <li><Link href="/cursos" style={{ opacity: 0.8 }}>Cursos de Capacitação</Link></li>
               <li><Link href="/tecnicos" style={{ opacity: 0.8 }}>Cursos Técnicos</Link></li>
-              <li><Link href="/graduacao" style={{ opacity: 0.8 }}>Graduação e EAD</Link></li>
+              <li><Link href="/tecnicos" style={{ opacity: 0.8 }}>Pós-Técnico</Link></li>
               <li><Link href="/consultoria" style={{ opacity: 0.8 }}>Consultorias</Link></li>
             </ul>
           </div>

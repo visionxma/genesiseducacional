@@ -44,8 +44,8 @@ export default function Home() {
               <Link href="/cursos" className="btn btn-primary" style={{ padding: '18px 44px', fontSize: '1.1rem' }}>
                 Conhecer Nossos Cursos <ArrowRight size={20} />
               </Link>
-              <Link href="/graduacao" className="btn btn-glass" style={{ padding: '18px 44px', fontSize: '1.1rem' }}>
-                Estudar na Gênesis
+              <Link href="/tecnicos" className="btn btn-glass" style={{ padding: '18px 44px', fontSize: '1.1rem' }}>
+                Cursos Técnicos
               </Link>
             </div>
 
@@ -135,7 +135,7 @@ export default function Home() {
               <Link href="/contato" className="btn" style={{ background: 'white', color: 'var(--site-primary)', padding: '15px 36px' }}>
                 Fale com a Gênesis
               </Link>
-              <Link href="/graduacao" className="btn" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.35)', color: 'white', padding: '15px 36px' }}>
+              <Link href="/tecnicos" className="btn" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.35)', color: 'white', padding: '15px 36px' }}>
                 Matrículas Abertas
               </Link>
             </div>

@@ -6,8 +6,8 @@ import { BookOpen, Leaf, Users, HeartHandshake, Laptop, LineChart, ChevronLeft, 
 const pilares = [
   {
     icon: BookOpen,
-    title: 'Ensino Superior & EAD',
-    desc: 'Graduações e Pós-graduações com polos estruturados no interior do Maranhão, Pará e todo o Brasil, levando educação superior de qualidade para onde ela é mais necessária.',
+    title: 'Cursos Técnicos & Pós-Técnico',
+    desc: 'Formações técnicas e pós-técnicas com polos estruturados no interior do Maranhão, Pará e todo o Brasil, levando educação profissional de qualidade para onde ela é mais necessária.',
     color: '#0044CC',
     image: 'https://static.poder360.com.br/2024/05/ead-garota-professora-ensino-a-distancia-2-848x477.png', // Universidade / Biblioteca
   },

@@ -85,9 +85,11 @@ export default function AdminLogin() {
           }}>
             Acesso Restrito
           </div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--site-text-primary)', marginBottom: '8px', letterSpacing: '-0.02em' }}>
-            Gênesis <span style={{ color: 'var(--site-primary)' }}>Admin</span>
-          </h1>
+          <img
+            src="/logo.PNG"
+            alt="Instituto Gênesis"
+            style={{ height: 50, width: 'auto', objectFit: 'contain', filter: 'brightness(0) saturate(100%)', marginBottom: 8 }}
+          />
           <p style={{ color: 'var(--site-text-secondary)', fontSize: '0.95rem' }}>
             Gerencie o conteúdo institucional com precisão.
           </p>

@@ -140,9 +140,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* ──── Sidebar ──── */}
       <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-brand">
-          <div className="sidebar-brand-title">
-            GÊNESIS<span className="sidebar-brand-dot">.</span> ADMIN
-          </div>
+          <img
+            src="/logo.PNG"
+            alt="Instituto Gênesis"
+            style={{ height: 36, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', marginBottom: 4 }}
+          />
           <div className="sidebar-brand-subtitle">Gestão Institucional</div>
         </div>
 
