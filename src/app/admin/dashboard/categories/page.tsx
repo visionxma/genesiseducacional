@@ -1,5 +1,6 @@
 'use client';
 import { supabase } from '@/lib/supabase';
+import { createPortal } from 'react-dom';
 import { useEffect, useState } from 'react';
 import {
   Tag,
@@ -106,14 +107,14 @@ export default function CategoriesAdmin() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
       {/* ── Notification Toast ───────────────── */}
-      {notification && (
+      {notification && typeof document !== 'undefined' && createPortal(
         <div
           className="admin-animate-in"
           style={{
             position: 'fixed',
             top: 90,
             right: 40,
-            zIndex: 200,
+            zIndex: 9999,
             display: 'flex',
             alignItems: 'center',
             gap: 10,
@@ -144,7 +145,8 @@ export default function CategoriesAdmin() {
             <AlertCircle size={18} />
           )}
           {notification.message}
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ── Two-Column Layout ────────────────── */}

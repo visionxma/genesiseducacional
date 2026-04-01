@@ -1,6 +1,7 @@
 'use client';
 import { supabase } from '@/lib/supabase';
-import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { useEffect, useState, useRef } from 'react';
 import {
   FileText,
   Plus,
@@ -17,6 +18,7 @@ import {
   Image as ImageIcon,
   X,
   Save,
+  Upload,
 } from 'lucide-react';
 
 /**
@@ -40,6 +42,8 @@ interface Category {
   name: string;
 }
 
+const BUCKET_NAME = 'images';
+
 export default function PostsAdmin() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -59,6 +63,9 @@ export default function PostsAdmin() {
   const [formContent, setFormContent] = useState('');
   const [formCategoryId, setFormCategoryId] = useState('');
   const [formImageUrl, setFormImageUrl] = useState('');
+  const [imageError, setImageError] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchData();
@@ -97,6 +104,7 @@ export default function PostsAdmin() {
     setFormContent('');
     setFormCategoryId('');
     setFormImageUrl('');
+    setImageError(false);
     setShowEditor(true);
   }
 
@@ -106,12 +114,46 @@ export default function PostsAdmin() {
     setFormContent(post.content || '');
     setFormCategoryId(post.category_id || '');
     setFormImageUrl(post.feature_image_url || '');
+    setImageError(false);
     setShowEditor(true);
   }
 
   function closeEditor() {
     setShowEditor(false);
     setEditingPost(null);
+    setUploading(false);
+  }
+
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setImageError(false);
+
+    const safeName = `${Date.now()}-${file.name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9.-]+/g, '-')}`;
+
+    const { data, error } = await supabase.storage
+      .from(BUCKET_NAME)
+      .upload(safeName, file);
+
+    if (data) {
+      const { data: { publicUrl } } = supabase.storage.from(BUCKET_NAME).getPublicUrl(safeName);
+      setFormImageUrl(publicUrl);
+      setNotification({ type: 'success', message: 'Imagem carregada com sucesso!' });
+    } else {
+      setNotification({
+        type: 'error',
+        message: error?.message || 'Erro no upload da imagem.',
+      });
+    }
+
+    setUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   }
 
   async function handleSavePost(e: React.FormEvent) {
@@ -194,14 +236,14 @@ export default function PostsAdmin() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* ── Notification Toast ──────────────── */}
-      {notification && (
+      {notification && typeof document !== 'undefined' && createPortal(
         <div
           className="admin-animate-in"
           style={{
             position: 'fixed',
             top: 90,
             right: 40,
-            zIndex: 200,
+            zIndex: 9999,
             display: 'flex',
             alignItems: 'center',
             gap: 10,
@@ -221,7 +263,8 @@ export default function PostsAdmin() {
         >
           {notification.type === 'success' ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
           {notification.message}
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ── Action Bar ──────────────────────── */}
@@ -412,7 +455,7 @@ export default function PostsAdmin() {
       </div>
 
       {/* ── Editor Modal / Slide Panel ────── */}
-      {showEditor && (
+      {showEditor && typeof document !== 'undefined' && createPortal(
         <>
           {/* Backdrop */}
           <div
@@ -422,7 +465,7 @@ export default function PostsAdmin() {
               inset: 0,
               background: 'rgba(13, 12, 27, 0.5)',
               backdropFilter: 'blur(6px)',
-              zIndex: 100,
+              zIndex: 9900,
               animation: 'adminFadeIn 0.2s ease forwards',
             }}
           />
@@ -440,7 +483,7 @@ export default function PostsAdmin() {
               background: 'var(--admin-surface)',
               borderLeft: '1px solid var(--admin-border)',
               boxShadow: '-12px 0 40px rgba(13, 12, 27, 0.12)',
-              zIndex: 110,
+              zIndex: 9910,
               display: 'flex',
               flexDirection: 'column',
               overflow: 'hidden',
@@ -552,19 +595,124 @@ export default function PostsAdmin() {
 
               <div>
                 <label className="admin-form-label" htmlFor="postImage">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <ImageIcon size={14} />
-                    URL da Imagem de Capa
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <ImageIcon size={14} />
+                      Imagem de Capa
+                    </div>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--admin-text-tertiary)', fontWeight: 400 }}>
+                      Upload ou URL externa
+                    </span>
                   </div>
                 </label>
-                <input
-                  id="postImage"
-                  type="url"
-                  className="admin-input"
-                  placeholder="https://..."
-                  value={formImageUrl}
-                  onChange={(e) => setFormImageUrl(e.target.value)}
-                />
+                
+                <div style={{ display: 'flex', gap: 10, marginBottom: 10 }}>
+                  <button
+                    type="button"
+                    className="admin-btn admin-btn-secondary"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                    style={{ flex: 1, height: 42, fontSize: '0.8rem' }}
+                  >
+                    {uploading ? (
+                      <Loader2 size={16} className="admin-spin" />
+                    ) : (
+                      <Upload size={16} />
+                    )}
+                    Selecionar Arquivo
+                  </button>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                  />
+                </div>
+
+                <div style={{ position: 'relative' }}>
+                  <input
+                    id="postImage"
+                    type="url"
+                    className="admin-input"
+                    placeholder="Ou cole uma URL externa aqui..."
+                    value={formImageUrl}
+                    onChange={(e) => {
+                      setFormImageUrl(e.target.value);
+                      setImageError(false);
+                    }}
+                    style={{ paddingRight: 40 }}
+                  />
+                  {formImageUrl && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormImageUrl('');
+                        setImageError(false);
+                      }}
+                      style={{
+                        position: 'absolute',
+                        right: 12,
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        background: 'none',
+                        border: 'none',
+                        color: 'var(--admin-text-tertiary)',
+                        cursor: 'pointer',
+                        padding: 4
+                      }}
+                    >
+                      <X size={14} />
+                    </button>
+                  )}
+                </div>
+                
+                {/* Image Preview & Validation */}
+                {formImageUrl && (
+                  <div style={{ marginTop: 12 }}>
+                    <div style={{
+                      borderRadius: 'var(--admin-radius-md)',
+                      overflow: 'hidden',
+                      border: `1px solid ${imageError ? 'var(--admin-danger)' : 'var(--admin-border)'}`,
+                      background: 'var(--admin-bg)',
+                      position: 'relative',
+                      minHeight: imageError ? 'auto' : 120,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'all 0.2s ease'
+                    }}>
+                      {!imageError ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img
+                          src={formImageUrl}
+                          alt="Preview"
+                          onError={() => setImageError(true)}
+                          onLoad={() => setImageError(false)}
+                          style={{
+                            maxWidth: '100%',
+                            maxHeight: 240,
+                            display: 'block',
+                            objectFit: 'contain'
+                          }}
+                        />
+                      ) : (
+                        <div style={{
+                          padding: '20px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          gap: 8,
+                          color: 'var(--admin-danger)',
+                          fontSize: '0.8rem'
+                        }}>
+                          <AlertCircle size={24} />
+                          <span style={{ fontWeight: 600 }}>URL de imagem inválida ou inacessível</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div style={{ flex: 1 }}>
@@ -615,7 +763,8 @@ export default function PostsAdmin() {
               </div>
             </form>
           </div>
-        </>
+        </>,
+        document.body
       )}
 
       {/* Spin animation */}

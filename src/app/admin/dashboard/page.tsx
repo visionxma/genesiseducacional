@@ -25,13 +25,23 @@ import {
  * Instituto Gênesis
  */
 
-const stats = [
+interface Stat {
+  label: string;
+  value: string;
+  icon: any;
+  trend: string;
+  trendDir: 'up' | 'down' | 'neutral';
+  colorClass: string;
+  progress: number;
+}
+
+const stats: Stat[] = [
   {
     label: 'Total de Posts',
     value: '24',
     icon: FileText,
     trend: '+8%',
-    trendDir: 'up' as const,
+    trendDir: 'up',
     colorClass: 'primary',
     progress: 65,
   },
@@ -40,7 +50,7 @@ const stats = [
     value: '12',
     icon: Tag,
     trend: 'Sincronizado',
-    trendDir: 'neutral' as const,
+    trendDir: 'neutral',
     colorClass: 'success',
     progress: 80,
   },
@@ -49,7 +59,7 @@ const stats = [
     value: '45.2k',
     icon: Eye,
     trend: '+12%',
-    trendDir: 'up' as const,
+    trendDir: 'up',
     colorClass: 'warning',
     progress: 72,
   },
@@ -58,7 +68,7 @@ const stats = [
     value: '1,240',
     icon: Users,
     trend: '+5%',
-    trendDir: 'up' as const,
+    trendDir: 'up',
     colorClass: 'info',
     progress: 55,
   },
@@ -155,8 +165,11 @@ export default function DashboardOverview() {
                   <Icon size={22} strokeWidth={2} />
                 </div>
                 <span className={`stat-card-badge ${stat.trendDir}`}>
-                  {stat.trendDir === 'up' && <TrendingUp size={12} />}
-                  {stat.trendDir === 'down' && <TrendingDown size={12} />}
+                  {stat.trendDir === 'up' ? (
+                    <TrendingUp size={12} />
+                  ) : stat.trendDir === 'down' ? (
+                    <TrendingDown size={12} />
+                  ) : null}
                   {stat.trend}
                 </span>
               </div>

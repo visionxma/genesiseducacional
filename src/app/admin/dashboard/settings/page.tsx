@@ -1,5 +1,6 @@
 'use client';
 import { supabase } from '@/lib/supabase';
+import { createPortal } from 'react-dom';
 import { useState, useEffect } from 'react';
 import {
   Settings,
@@ -29,7 +30,7 @@ export default function SettingsAdmin() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session } }: any) => {
       setSession(session);
       setLoading(false);
     });
@@ -64,14 +65,14 @@ export default function SettingsAdmin() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
       {/* ── Notification Toast ──────────────── */}
-      {notification && (
+      {notification && typeof document !== 'undefined' && createPortal(
         <div
           className="admin-animate-in"
           style={{
             position: 'fixed',
             top: 90,
             right: 40,
-            zIndex: 200,
+            zIndex: 9999,
             display: 'flex',
             alignItems: 'center',
             gap: 10,
@@ -101,7 +102,8 @@ export default function SettingsAdmin() {
             <AlertCircle size={18} />
           )}
           {notification.message}
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ── Two Column Layout ──────────────── */}

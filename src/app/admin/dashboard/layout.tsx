@@ -50,18 +50,35 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const currentPath = usePathname();
   const [session, setSession] = useState<any>(null);
+  const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [currentTime, setCurrentTime] = useState('');
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    // 1. Verifica a sessão inicial e bloqueia o acesso instantaneamente se não houver
+    supabase.auth.getSession().then(({ data: { session } }: any) => {
       if (!session) {
-        // router.push('/admin'); // Proteção de rota — reativar em produção
+        router.replace('/admin'); // Redireciona para o login de forma segura
+      } else {
+        setSession(session);
+        setIsLoadingAuth(false);
       }
-      setSession(session);
     });
+
+    // 2. Protege ativamente contra deslogar enquanto ainda na página
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, authSession: any) => {
+      if (!authSession) {
+        router.replace('/admin');
+      } else {
+        setSession(authSession);
+        setIsLoadingAuth(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+
 
     // Check system preference or saved theme
     const savedTheme = localStorage.getItem('admin-theme') as 'light' | 'dark';
@@ -105,6 +122,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     await supabase.auth.signOut();
     router.push('/admin');
   };
+
+  if (isLoadingAuth) {
+    return (
+      <div style={{ display: 'flex', height: '100vh', width: '100vw', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--site-bg)' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ width: 40, height: 40, border: '3px solid var(--site-border)', borderTopColor: 'var(--site-primary)', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 16px' }} />
+          <p style={{ color: 'var(--site-text-secondary)', fontWeight: 500, fontSize: '0.9rem', letterSpacing: '0.05em' }}>VERIFICANDO ACESSO SEGURO...</p>
+        </div>
+        <style>{`@keyframes spin { 100% { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
 
   return (
     <div className="admin-shell">

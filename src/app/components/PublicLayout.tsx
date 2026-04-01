@@ -109,10 +109,10 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           <div style={{ display: 'flex', gap: 16 }}></div>
         </div>
         
-        {/* Helper class inline specifically for this layout */}
-        <style dangerouslySetInnerHTML={{__html: `
+        {/* Helper class inline specifically for this layout usando forma segura */}
+        <style>{`
           @media (min-width: 900px) { .md-flex { display: flex !important; } }
-        `}} />
+        `}</style>
       </header>
 
       {/* Rende os componentes da página (fade in) */}

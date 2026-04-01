@@ -12,13 +12,17 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setErrorMessage('');
+    setSuccessMessage('');
 
     if (!email || !password) {
-      alert("Por favor, preencha todos os campos.");
+      setErrorMessage("Por favor, preencha todos os campos corretamente.");
       setLoading(false);
       return;
     }
@@ -30,14 +34,16 @@ export default function AdminLogin() {
       });
 
       if (error) {
-        alert("Erro na autenticação: " + error.message);
+        setErrorMessage("Credenciais inválidas. Verifique seu email e senha.");
+        setLoading(false);
       } else if (data.user) {
-        alert("Sucesso! Bem-vindo ao painel Gênesis.");
-        window.location.href = '/admin/dashboard'; // Redireciona para o dashboard
+        setSuccessMessage("Autenticação aprovada! Preparando ambiente...");
+        setTimeout(() => {
+          window.location.href = '/admin/dashboard';
+        }, 1200);
       }
     } catch (err: any) {
-      alert("Erro inesperado: " + err.message);
-    } finally {
+      setErrorMessage("Erro de conexão com o servidor. Tente novamente.");
       setLoading(false);
     }
   };
@@ -86,6 +92,20 @@ export default function AdminLogin() {
             Gerencie o conteúdo institucional com precisão.
           </p>
         </div>
+
+        {errorMessage && (
+          <div style={{ marginBottom: 24, padding: '14px 16px', backgroundColor: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.2)', color: '#ef4444', fontSize: '0.85rem', fontWeight: 500, borderRadius: 0, display: 'flex', alignItems: 'center', gap: 12, animation: 'fadeIn 0.3s ease' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            {errorMessage}
+          </div>
+        )}
+
+        {successMessage && (
+          <div style={{ marginBottom: 24, padding: '14px 16px', backgroundColor: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.2)', color: '#10b981', fontSize: '0.85rem', fontWeight: 500, borderRadius: 0, display: 'flex', alignItems: 'center', gap: 12, animation: 'fadeIn 0.3s ease' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            {successMessage}
+          </div>
+        )}
 
         <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -162,7 +182,7 @@ export default function AdminLogin() {
 
           <button 
             type="submit" 
-            disabled={loading}
+            disabled={loading || !!successMessage}
             className="btn btn-primary"
             style={{ 
               width: '100%', 
@@ -170,12 +190,23 @@ export default function AdminLogin() {
               fontSize: '1rem', 
               padding: '16px', 
               borderRadius: 0,
-              cursor: loading ? 'not-allowed' : 'pointer'
+              cursor: (loading || !!successMessage) ? 'not-allowed' : 'pointer',
+              backgroundColor: successMessage ? '#10b981' : undefined,
+              borderColor: successMessage ? '#10b981' : undefined,
+              color: successMessage ? '#ffffff' : undefined,
+              transition: 'all 0.3s ease'
             }}
           >
-            {loading ? 'Autenticando...' : 'Entrar no Sistema'}
+            {successMessage ? 'Acesso Liberado ✨' : loading ? 'Autenticando...' : 'Entrar no Sistema'}
           </button>
         </form>
+
+        <style>{`
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+        `}</style>
 
         <p style={{ textAlign: 'center', marginTop: '32px', color: 'var(--site-text-tertiary)', fontSize: '0.8rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
           Plataforma Gênesis — v1.5
