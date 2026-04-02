@@ -35,7 +35,6 @@ const categoryColors = [
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<Post | null>(null);
-  const [category, setCategory] = useState<Category | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<Post[]>([]);
   const [allCategories, setAllCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,11 +52,6 @@ export default function BlogPostPage() {
       const postData: Post = postRes.data;
       setPost(postData);
       if (catsRes.data) setAllCategories(catsRes.data);
-
-      if (postData.category_id && catsRes.data) {
-        const cat = catsRes.data.find((c: Category) => c.id === postData.category_id) || null;
-        setCategory(cat);
-      }
 
       // Related posts (same category, excluding current)
       const relatedQuery = supabase.from('posts').select('*').neq('id', postData.id).limit(3);
@@ -190,7 +184,7 @@ export default function BlogPostPage() {
           <section className="glass-section-white" style={{ borderTop: 'none', padding: '0 0 80px' }}>
             <div className="container">
               <h3 style={{ fontSize: '1.5rem', marginBottom: 24 }}>Leia também</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(280px, 100%), 1fr))', gap: 20 }}>
                 {relatedPosts.map(related => {
                   const rColor = getCategoryColor(related.category_id);
                   return (

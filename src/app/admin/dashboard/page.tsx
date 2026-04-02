@@ -48,7 +48,7 @@ export default function DashboardOverview() {
         supabase.from('posts').select('*', { count: 'exact', head: true }),
         supabase.from('categories').select('*', { count: 'exact', head: true }),
         supabase.from('courses').select('*', { count: 'exact', head: true }),
-        supabase.from('transparency_docs').select('*', { count: 'exact', head: true }),
+        supabase.from('transparency_records').select('*', { count: 'exact', head: true }),
         supabase.from('posts').select('id, title, category_id, created_at').order('created_at', { ascending: false }).limit(5),
       ]);
 

@@ -66,8 +66,6 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             {[
               { label: 'Início', path: '/' },
               { label: 'Cursos', path: '/cursos' },
-              { label: 'Pós-Técnico', path: '/tecnicos' },
-              { label: 'Técnicos', path: '/tecnicos' },
               { label: 'Consultoria', path: '/consultoria' },
               { label: 'Blog', path: '/blog' },
               { label: 'Transparência', path: '/transparencia' },
@@ -134,8 +132,6 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             {[
               { label: 'Início', path: '/' },
               { label: 'Cursos', path: '/cursos' },
-              { label: 'Pós-Técnico', path: '/tecnicos' },
-              { label: 'Técnicos', path: '/tecnicos' },
               { label: 'Consultoria', path: '/consultoria' },
               { label: 'Blog', path: '/blog' },
               { label: 'Transparência', path: '/transparencia' },
@@ -223,8 +219,6 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
               {[
                 { label: 'Cursos de Capacitação', href: '/cursos' },
-                { label: 'Cursos Técnicos', href: '/tecnicos' },
-                { label: 'Pós-Técnico', href: '/tecnicos' },
                 { label: 'Consultoria', href: '/consultoria' },
               ].map(({ label, href }) => (
                 <li key={label}>

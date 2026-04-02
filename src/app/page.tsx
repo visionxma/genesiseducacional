@@ -44,7 +44,7 @@ export default function Home() {
               <Link href="/cursos" className="btn btn-primary" style={{ padding: '18px 44px', fontSize: '1.1rem' }}>
                 Conhecer Nossos Cursos <ArrowRight size={20} />
               </Link>
-              <Link href="/tecnicos" className="btn btn-glass" style={{ padding: '18px 44px', fontSize: '1.1rem' }}>
+              <Link href="/cursos" className="btn btn-glass" style={{ padding: '18px 44px', fontSize: '1.1rem' }}>
                 Cursos Técnicos
               </Link>
             </div>
@@ -82,7 +82,7 @@ export default function Home() {
 
         {/* 3. METODOLOGIA — Glass White */}
         <section className="glass-section-white section-padding">
-          <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: 80, alignItems: 'center' }}>
+          <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(380px, 100%), 1fr))', gap: 80, alignItems: 'center' }}>
             <div>
               <h2 style={{ marginBottom: 20, fontSize: '2.2rem' }}>Aprenda no seu ritmo, de qualquer lugar do Brasil.</h2>
               <p style={{ fontSize: '1.1rem', color: 'var(--site-text-secondary)', marginBottom: 36, lineHeight: 1.7 }}>
@@ -135,7 +135,7 @@ export default function Home() {
               <Link href="/contato" className="btn" style={{ background: 'white', color: 'var(--site-primary)', padding: '15px 36px' }}>
                 Fale com a Gênesis
               </Link>
-              <Link href="/tecnicos" className="btn" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.35)', color: 'white', padding: '15px 36px' }}>
+              <Link href="/cursos" className="btn" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.35)', color: 'white', padding: '15px 36px' }}>
                 Matrículas Abertas
               </Link>
             </div>

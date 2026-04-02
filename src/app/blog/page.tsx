@@ -130,7 +130,7 @@ export default function Blog() {
                 {rest.length > 0 && (
                   <>
                     <h3 style={{ fontSize: '1.6rem', marginBottom: 20 }}>Publicações Recentes</h3>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(300px, 100%), 1fr))', gap: 20 }}>
                       {rest.map(post => {
                         const color = getCategoryColor(post.category_id);
                         return (

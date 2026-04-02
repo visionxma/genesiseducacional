@@ -51,6 +51,7 @@ html, body {
   line-height: 1.6;
   scroll-behavior: smooth;
   transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
 }
 
 a {
@@ -190,6 +191,7 @@ h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
   filter: blur(140px);
   opacity: 0.08;
   pointer-events: none;
+  max-width: 100%;
 }
 
 /* --- Hero Ticker (Infinite Scroll) --- */
