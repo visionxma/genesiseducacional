@@ -8,7 +8,6 @@ import {
   FileText,
   Tag,
   Image as ImageIcon,
-  Search,
   Settings,
   LogOut,
   ChevronRight,
@@ -18,6 +17,8 @@ import {
   Moon,
   Sun,
   Users,
+  BookOpen,
+  ShieldCheck,
 } from 'lucide-react';
 import './admin.css';
 import AdminSearch from './AdminSearch';
@@ -29,7 +30,9 @@ import AdminSearch from './AdminSearch';
 
 const navItems = [
   { label: 'Visão Geral', path: '/admin/dashboard', icon: LayoutDashboard, section: 'Principal' },
-  { label: 'Postagens', path: '/admin/dashboard/posts', icon: FileText, section: 'Principal' },
+  { label: 'Blog / Postagens', path: '/admin/dashboard/posts', icon: FileText, section: 'Conteúdo' },
+  { label: 'Catálogo de Cursos', path: '/admin/dashboard/cursos', icon: BookOpen, section: 'Conteúdo' },
+  { label: 'Transparência', path: '/admin/dashboard/transparencia', icon: ShieldCheck, section: 'Conteúdo' },
   { label: 'Categorias', path: '/admin/dashboard/categories', icon: Tag, section: 'Conteúdo' },
   { label: 'Mídia / Imagens', path: '/admin/dashboard/media', icon: ImageIcon, section: 'Conteúdo' },
   { label: 'Configurações', path: '/admin/dashboard/settings', icon: Settings, section: 'Sistema' },
@@ -38,7 +41,9 @@ const navItems = [
 function getBreadcrumb(path: string) {
   const map: Record<string, string> = {
     '/admin/dashboard': 'Visão Geral',
-    '/admin/dashboard/posts': 'Postagens',
+    '/admin/dashboard/posts': 'Blog / Postagens',
+    '/admin/dashboard/cursos': 'Catálogo de Cursos',
+    '/admin/dashboard/transparencia': 'Transparência',
     '/admin/dashboard/categories': 'Categorias',
     '/admin/dashboard/media': 'Mídia',
     '/admin/dashboard/settings': 'Configurações',

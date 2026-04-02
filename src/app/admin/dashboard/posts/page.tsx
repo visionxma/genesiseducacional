@@ -544,10 +544,16 @@ export default function PostsAdmin() {
                   className="admin-input"
                   placeholder="Título da postagem"
                   value={formTitle}
-                  onChange={(e) => setFormTitle(e.target.value)}
+                  onChange={(e) => setFormTitle(e.target.value.slice(0, 120))}
                   required
                   autoFocus
                 />
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
+                  <span />
+                  <span style={{ fontSize: '0.7rem', color: formTitle.length >= 110 ? 'var(--admin-danger)' : 'var(--admin-text-tertiary)' }}>
+                    {formTitle.length}/120
+                  </span>
+                </div>
                 {formTitle.trim() && (
                   <div
                     style={{
@@ -724,7 +730,7 @@ export default function PostsAdmin() {
                   className="admin-input"
                   placeholder="Escreva o conteúdo da postagem (Markdown ou HTML)..."
                   value={formContent}
-                  onChange={(e) => setFormContent(e.target.value)}
+                  onChange={(e) => setFormContent(e.target.value.slice(0, 10000))}
                   style={{
                     minHeight: 220,
                     resize: 'vertical',
@@ -732,6 +738,11 @@ export default function PostsAdmin() {
                     fontFamily: "'Inter', sans-serif",
                   }}
                 />
+                <div style={{ textAlign: 'right', marginTop: 4 }}>
+                  <span style={{ fontSize: '0.7rem', color: formContent.length >= 9500 ? 'var(--admin-danger)' : 'var(--admin-text-tertiary)' }}>
+                    {formContent.length}/10.000
+                  </span>
+                </div>
               </div>
 
               {/* Panel Footer */}

@@ -1,83 +1,183 @@
-import PublicLayout from '../components/PublicLayout';
+'use client';
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import PublicLayout from '../components/PublicLayout';
+import { supabase } from '@/lib/supabase';
+import { Loader2, FolderOpen, Calendar } from 'lucide-react';
 
-import type { Metadata } from 'next';
+interface Post {
+  id: string;
+  title: string;
+  slug: string;
+  content: string | null;
+  feature_image_url: string | null;
+  category_id: string | null;
+  created_at: string;
+}
 
-export const metadata: Metadata = {
-  title: 'Blog — Notícias e Relatos',
-  description: 'Acompanhe projetos, histórias de impacto e ações do Instituto Gênesis Educacional nas comunidades do Maranhão e Pará.',
-  openGraph: {
-    title: 'Blog | Instituto Gênesis Educacional',
-    description: 'Notícias, documentários e relatos de impacto das ações do Instituto Gênesis nas comunidades.',
-    url: '/blog',
-  },
-};
+interface Category {
+  id: string;
+  name: string;
+}
+
+const categoryColors = [
+  '#2B44FF', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444', '#EC4899', '#06B6D4',
+];
 
 export default function Blog() {
-  const posts = [
-    { type: "DOCUMENTÁRIO", date: "2019", title: "O Sucesso de 'Catadores: Da Invisibilidade ao Protagonismo'", desc: "Como evidenciamos a vida real e as forças das comunidades através do poder do audiovisual e narrativas verdadeiras.", color: "#F59E0B" },
-    { type: "ECONOMIA SOLIDÁRIA", date: "2022", title: "Grupos avançam criando produtos de alta renda familiar", desc: "Sementes crioulas preservadas pelas mulheres do campo se tornam base forte para negócios coletivos sustentáveis.", color: "#10B981" },
-    { type: "AÇÕES COMUNITÁRIAS", date: "2024", title: "Novas turmas de Polos Técnicos de Empregabilidade", desc: "Iniciando atividades curriculares com jovens buscando oportunidades reais nas associações de agricultura.", color: "#2B44FF" }
-  ];
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      const [postsRes, catsRes] = await Promise.all([
+        supabase.from('posts').select('*').order('created_at', { ascending: false }),
+        supabase.from('categories').select('id, name').order('name'),
+      ]);
+      if (postsRes.data) setPosts(postsRes.data);
+      if (catsRes.data) setCategories(catsRes.data);
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
+
+  function getCategoryName(catId: string | null): string {
+    if (!catId) return 'Sem categoria';
+    return categories.find(c => c.id === catId)?.name || 'Geral';
+  }
+
+  function getCategoryColor(catId: string | null): string {
+    if (!catId) return categoryColors[0];
+    const idx = categories.findIndex(c => c.id === catId);
+    return categoryColors[idx % categoryColors.length] || categoryColors[0];
+  }
+
+  function formatDate(d: string) {
+    return new Date(d).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  function excerpt(content: string | null, max = 140) {
+    if (!content) return '';
+    const stripped = content.replace(/<[^>]+>/g, '').replace(/\n+/g, ' ').trim();
+    return stripped.length > max ? stripped.slice(0, max) + '…' : stripped;
+  }
+
+  const [featured, ...rest] = posts;
 
   return (
     <PublicLayout>
       <main className="animate-fade-up" style={{ background: 'var(--site-bg)' }}>
+
         {/* HEADER */}
         <section className="glass-section-white" style={{ padding: '100px 0 40px', textAlign: 'center' }}>
-          <div className="container" style={{ textAlign: 'center' }}>
+          <div className="container">
             <h1 style={{ fontSize: '3rem', marginBottom: 12 }}>Notícias e Relatos</h1>
-            <p style={{ fontSize: '1.1rem', color: 'var(--site-text-secondary)' }}>Acompanhe os projetos, histórias e o impacto das ações do Instituto Gênesis.</p>
+            <p style={{ fontSize: '1.1rem', color: 'var(--site-text-secondary)' }}>
+              Acompanhe os projetos, histórias e o impacto das ações do Instituto Gênesis.
+            </p>
           </div>
         </section>
 
-        {/* POSTS GRID */}
-        <section className="glass-section-white" style={{ borderTop: 'none', padding: '80px 0' }}>
+        {/* CONTENT */}
+        <section className="glass-section-white" style={{ borderTop: 'none', padding: '60px 0 100px' }}>
           <div className="container">
-            
-            {/* FEATURED POST */}
-            <div className="glass-panel" style={{ padding: 32, marginBottom: 40, display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap' }}>
-              <div style={{ flex: '1 1 400px', height: 320, borderRadius: 'var(--site-radius-md)', overflow: 'hidden', border: '1px solid var(--site-border)' }}>
-                <img src="/images/blog_destaque.png" alt="Featured Post" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            {loading ? (
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '80px 0', gap: 12, color: 'var(--site-text-secondary)' }}>
+                <Loader2 size={24} style={{ animation: 'spin 1s linear infinite' }} />
+                <span>Carregando postagens...</span>
               </div>
-              <div style={{ flex: '1 1 400px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                  <span style={{ padding: '6px 12px', background: 'var(--site-primary-glow)', color: 'var(--site-primary)', fontSize: '0.75rem', fontWeight: 700, borderRadius: 0, letterSpacing: '0.05em' }}>NOVOS PROJETOS</span>
-                  <span style={{ color: 'var(--site-text-tertiary)', fontSize: '0.9rem', fontWeight: 500 }}>10 MAR 2024</span>
-                </div>
-                <h2 style={{ fontSize: '2rem', lineHeight: 1.2, marginBottom: 16 }}>Implantação de Quintais Agroecológicos apoiados pelo MDA do Governo Federal.</h2>
-                <p style={{ fontSize: '1.1rem', color: 'var(--site-text-secondary)', lineHeight: 1.6, marginBottom: 24 }}>
-                  Mais de dois projetos aprovados em grande escala para a implementação de novas Unidades de Conservação começam a impactar forte em 5 municípios diferentes.
-                </p>
-                <button className="btn btn-primary">Ler Artigo Completo</button>
+            ) : posts.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '80px 0', color: 'var(--site-text-tertiary)' }}>
+                <FolderOpen size={48} style={{ marginBottom: 16, opacity: 0.4 }} />
+                <p style={{ fontSize: '1.1rem' }}>Nenhuma postagem publicada ainda.</p>
               </div>
-            </div>
-
-            {/* LISTING */}
-            <h3 style={{ fontSize: '1.6rem', marginBottom: 20 }}>Publicações Recentes</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
-              {posts.map((post, i) => (
-                <div key={i} className="glass-panel" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 20 }}>
-                  <div style={{ height: 180, borderRadius: 'var(--site-radius-sm)', marginBottom: 16, overflow: 'hidden', border: '1px solid var(--site-border)' }}>
-                    <img 
-                      src={`/images/${i === 0 ? 'blog_doc' : i === 1 ? 'blog_mulheres' : 'blog_destaque'}.png`} 
-                      alt={post.title} 
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                    />
+            ) : (
+              <>
+                {/* FEATURED POST */}
+                {featured && (
+                  <div className="glass-panel" style={{ padding: 32, marginBottom: 48, display: 'flex', gap: 32, alignItems: 'center', flexWrap: 'wrap' }}>
+                    <div style={{ flex: '1 1 380px', height: 300, borderRadius: 'var(--site-radius-md)', overflow: 'hidden', border: '1px solid var(--site-border)', background: 'var(--site-surface)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {featured.feature_image_url
+                        ? <img src={featured.feature_image_url} alt={featured.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        : <FolderOpen size={48} style={{ opacity: 0.2 }} />
+                      }
+                    </div>
+                    <div style={{ flex: '1 1 380px', minWidth: 0, overflow: 'hidden' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
+                        <span style={{ padding: '6px 12px', background: `${getCategoryColor(featured.category_id)}15`, color: getCategoryColor(featured.category_id), fontSize: '0.75rem', fontWeight: 700, borderRadius: 0, letterSpacing: '0.05em' }}>
+                          {getCategoryName(featured.category_id).toUpperCase()}
+                        </span>
+                        <span style={{ color: 'var(--site-text-tertiary)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: 5 }}>
+                          <Calendar size={14} />{formatDate(featured.created_at)}
+                        </span>
+                      </div>
+                      <h2 style={{ fontSize: '1.9rem', lineHeight: 1.25, marginBottom: 14, wordBreak: 'break-word', overflowWrap: 'break-word' }}>{featured.title}</h2>
+                      {featured.content && (
+                        <p style={{ fontSize: '1.05rem', color: 'var(--site-text-secondary)', lineHeight: 1.6, marginBottom: 24, wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                          {excerpt(featured.content, 200)}
+                        </p>
+                      )}
+                      <Link href={`/blog/${featured.slug}`} className="btn btn-primary" style={{ textDecoration: 'none' }}>
+                        Ler Artigo Completo
+                      </Link>
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                    <span style={{ color: post.color, fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.05em' }}>{post.type}</span>
-                    <span style={{ color: 'var(--site-text-tertiary)', fontSize: '0.8rem' }}>• {post.date}</span>
-                  </div>
-                  <h4 style={{ fontSize: '1.4rem', marginBottom: 12, lineHeight: 1.3 }}>{post.title}</h4>
-                  <p style={{ color: 'var(--site-text-secondary)', fontSize: '0.95rem', lineHeight: 1.6 }}>{post.desc}</p>
-                </div>
-              ))}
-            </div>
+                )}
 
+                {/* POSTS GRID */}
+                {rest.length > 0 && (
+                  <>
+                    <h3 style={{ fontSize: '1.6rem', marginBottom: 20 }}>Publicações Recentes</h3>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
+                      {rest.map(post => {
+                        const color = getCategoryColor(post.category_id);
+                        return (
+                          <Link
+                            key={post.id}
+                            href={`/blog/${post.slug}`}
+                            style={{ textDecoration: 'none' }}
+                          >
+                            <div
+                              className="glass-panel"
+                              style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 20, height: '100%', transition: 'transform 0.2s' }}
+                              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-3px)')}
+                              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+                            >
+                              <div style={{ height: 180, borderRadius: 'var(--site-radius-sm)', marginBottom: 16, overflow: 'hidden', border: '1px solid var(--site-border)', background: 'var(--site-surface)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                {post.feature_image_url
+                                  ? <img src={post.feature_image_url} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                  : <FolderOpen size={32} style={{ opacity: 0.2 }} />
+                                }
+                              </div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                                <span style={{ color, fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.05em' }}>
+                                  {getCategoryName(post.category_id).toUpperCase()}
+                                </span>
+                                <span style={{ color: 'var(--site-text-tertiary)', fontSize: '0.78rem' }}>
+                                  • {formatDate(post.created_at)}
+                                </span>
+                              </div>
+                              <h4 style={{ fontSize: '1.2rem', marginBottom: 10, lineHeight: 1.3, color: 'var(--site-text-primary)', wordBreak: 'break-word', overflowWrap: 'break-word' }}>{post.title}</h4>
+                              {post.content && (
+                                <p style={{ color: 'var(--site-text-secondary)', fontSize: '0.9rem', lineHeight: 1.55, wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                                  {excerpt(post.content)}
+                                </p>
+                              )}
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
+              </>
+            )}
           </div>
         </section>
       </main>
+      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </PublicLayout>
   );
 }

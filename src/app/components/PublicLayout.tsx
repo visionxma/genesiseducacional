@@ -1,11 +1,13 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
-import { ArrowRight, BookOpen, Wrench, Users } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const isActive = (path: string) => pathname === path;
 
@@ -68,9 +70,10 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               { label: 'Técnicos', path: '/tecnicos' },
               { label: 'Consultoria', path: '/consultoria' },
               { label: 'Blog', path: '/blog' },
+              { label: 'Transparência', path: '/transparencia' },
             ].map((item) => (
               <Link
-                key={item.path}
+                key={item.label}
                 href={item.path}
                 style={{
                   color: isActive(item.path) ? 'white' : 'rgba(255,255,255,0.75)',
@@ -91,13 +94,77 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             ))}
           </nav>
 
-          {/* ACTIONS */}
-          <div style={{ display: 'flex', gap: 16 }}></div>
+          {/* ACTIONS E BOTÃO MOBILE */}
+          <div style={{ display: 'flex', gap: 16 }}>
+            <button
+               className="mobile-only"
+               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+               style={{
+                 background: 'transparent',
+                 border: 'none',
+                 color: 'white',
+                 cursor: 'pointer',
+                 display: 'flex',
+                 alignItems: 'center',
+                 padding: 8
+               }}
+            >
+               {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
+          </div>
         </div>
+
+        {/* MOBILE NAV DROPDOWN */}
+        {isMobileMenuOpen && (
+          <div className="mobile-only" style={{
+            position: 'absolute',
+            top: '68px',
+            left: 0,
+            right: 0,
+            background: 'var(--site-primary)',
+            borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+            padding: '24px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+            borderRadius: '0 0 12px 12px',
+            zIndex: 90
+          }}>
+            {[
+              { label: 'Início', path: '/' },
+              { label: 'Cursos', path: '/cursos' },
+              { label: 'Pós-Técnico', path: '/tecnicos' },
+              { label: 'Técnicos', path: '/tecnicos' },
+              { label: 'Consultoria', path: '/consultoria' },
+              { label: 'Blog', path: '/blog' },
+              { label: 'Transparência', path: '/transparencia' },
+            ].map((item) => (
+              <Link
+                key={item.label}
+                href={item.path}
+                onClick={() => setIsMobileMenuOpen(false)}
+                style={{
+                  color: isActive(item.path) ? 'white' : 'rgba(255,255,255,0.75)',
+                  fontWeight: isActive(item.path) ? 700 : 500,
+                  fontSize: '1.2rem',
+                  padding: '12px 0',
+                  borderBottom: '1px solid rgba(255,255,255,0.05)',
+                  textDecoration: 'none'
+                }}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        )}
         
         {/* Helper class inline specifically for this layout usando forma segura */}
         <style>{`
-          @media (min-width: 900px) { .md-flex { display: flex !important; } }
+          @media (min-width: 900px) { 
+            .md-flex { display: flex !important; } 
+            .mobile-only { display: none !important; }
+          }
         `}</style>
       </header>
 
@@ -108,76 +175,96 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
       <footer
         className="glass-section-white"
-        style={{
-          borderTop: '1px solid var(--site-border)',
-          padding: '80px 0 40px',
-        }}
+        style={{ borderTop: '1px solid var(--site-border)', padding: '72px 0 40px' }}
       >
         <div className="container" style={{
-          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: 60, marginBottom: 80
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          gap: 48,
+          marginBottom: 64,
         }}>
-          {/* Brand Col */}
+          {/* Brand */}
           <div>
-            <div style={{ marginBottom: 20 }}>
-              <img
-                src="/logo.PNG"
-                alt="Instituto Gênesis"
-                style={{ height: 44, width: 'auto', objectFit: 'contain', filter: 'brightness(0) saturate(100%)' }}
-              />
-            </div>
-            <p style={{ color: 'var(--site-text-secondary)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: 24, maxWidth: 300 }}>
+            <Link href="/" style={{ display: 'inline-block', marginBottom: 16 }}>
+              <img src="/logo.PNG" alt="Instituto Gênesis" style={{ height: 44, width: 'auto', objectFit: 'contain', filter: 'brightness(0) saturate(100%)' }} />
+            </Link>
+            <p style={{ color: 'var(--site-text-secondary)', fontSize: '0.92rem', lineHeight: 1.65, maxWidth: 280 }}>
               Formação, Inovação e Desenvolvimento Social para comunidades do Maranhão e Pará desde 2013.
             </p>
-            <div style={{ display: 'flex', gap: 12 }}>
-              {[BookOpen, Wrench, Users].map((Icon, i) => (
-                <div key={i} style={{ 
-                  width: 40, height: 40, borderRadius: 0,
-                  background: 'var(--site-surface)', border: '1px solid var(--site-border)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: 'var(--site-text-secondary)', cursor: 'pointer'
-                }}>
-                  <Icon size={18} />
-                </div>
-              ))}
-            </div>
           </div>
 
-          {/* Links Col 1 */}
+          {/* Institucional */}
           <div>
-            <h4 style={{ fontSize: '1.1rem', marginBottom: 24, color: 'var(--site-text-primary)' }}>Institucional</h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12, color: 'var(--site-text-secondary)', fontSize: '0.95rem' }}>
-              <li><Link href="/" style={{ opacity: 0.8 }}>Sobre Nós</Link></li>
-              <li><Link href="/" style={{ opacity: 0.8 }}>Impacto Social</Link></li>
-              <li><Link href="/" style={{ opacity: 0.8 }}>Transparência</Link></li>
-              <li><Link href="/blog" style={{ opacity: 0.8 }}>Blog e Notícias</Link></li>
+            <h4 style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--site-text-tertiary)', marginBottom: 20 }}>
+              Institucional
+            </h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {[
+                { label: 'Início', href: '/' },
+                { label: 'Transparência', href: '/transparencia' },
+                { label: 'Blog e Notícias', href: '/blog' },
+              ].map(({ label, href }) => (
+                <li key={href}>
+                  <Link href={href} style={{ color: 'var(--site-text-secondary)', fontSize: '0.93rem', textDecoration: 'none', transition: 'color 0.2s' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = 'var(--site-text-primary)')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'var(--site-text-secondary)')}>
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Links Col 2 */}
+          {/* Educação */}
           <div>
-            <h4 style={{ fontSize: '1.1rem', marginBottom: 24, color: 'var(--site-text-primary)' }}>Educação</h4>
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12, color: 'var(--site-text-secondary)', fontSize: '0.95rem' }}>
-              <li><Link href="/cursos" style={{ opacity: 0.8 }}>Cursos de Capacitação</Link></li>
-              <li><Link href="/tecnicos" style={{ opacity: 0.8 }}>Cursos Técnicos</Link></li>
-              <li><Link href="/tecnicos" style={{ opacity: 0.8 }}>Pós-Técnico</Link></li>
-              <li><Link href="/consultoria" style={{ opacity: 0.8 }}>Consultorias</Link></li>
+            <h4 style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--site-text-tertiary)', marginBottom: 20 }}>
+              Educação
+            </h4>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {[
+                { label: 'Cursos de Capacitação', href: '/cursos' },
+                { label: 'Cursos Técnicos', href: '/tecnicos' },
+                { label: 'Pós-Técnico', href: '/tecnicos' },
+                { label: 'Consultoria', href: '/consultoria' },
+              ].map(({ label, href }) => (
+                <li key={label}>
+                  <Link href={href} style={{ color: 'var(--site-text-secondary)', fontSize: '0.93rem', textDecoration: 'none', transition: 'color 0.2s' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = 'var(--site-text-primary)')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'var(--site-text-secondary)')}>
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="container" style={{ 
+        <div className="container" style={{
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          flexWrap: 'wrap', gap: 20, paddingTop: 30,
+          flexWrap: 'wrap', gap: 16, paddingTop: 28,
           borderTop: '1px solid var(--site-border)',
-          color: 'var(--site-text-tertiary)', fontSize: '0.85rem'
+          color: 'var(--site-text-tertiary)', fontSize: '0.82rem',
         }}>
           <p>&copy; {new Date().getFullYear()} Instituto Gênesis. Educação que transforma.</p>
-          <div style={{ display: 'flex', gap: 24 }}>
-            <Link href="/" style={{ opacity: 0.8 }}>Termos de Uso</Link>
-            <Link href="/" style={{ opacity: 0.8 }}>Política de Privacidade</Link>
-          </div>
+          <a
+            href="https://visionxma.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: 'flex', alignItems: 'center', gap: 5, textDecoration: 'none', color: 'var(--site-text-tertiary)' }}
+          >
+            Desenvolvido por{' '}
+            <span style={{
+              fontWeight: 800,
+              letterSpacing: '0.05em',
+              background: 'linear-gradient(90deg, #2B44FF, #7C3AED)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}>
+              VisionX
+            </span>
+          </a>
         </div>
       </footer>
     </>
