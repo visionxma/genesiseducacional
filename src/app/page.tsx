@@ -26,6 +26,9 @@ export default function Home() {
               Blog
             </Link>
           </div>
+          <Link href="/cursos" className="hero-btn-mobile" >
+            Conhecer Nossos Cursos <ArrowRight size={16} />
+          </Link>
           <style>{`
             .hero-btns {
               display: none;
@@ -39,6 +42,28 @@ export default function Home() {
                 right: 8%;
                 transform: translateY(-50%);
               }
+            }
+            .hero-btn-mobile {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 8px;
+              position: absolute;
+              top: 80%;
+              left: 50%;
+              transform: translateX(-50%);
+              background: white;
+              color: var(--site-primary);
+              font-weight: 700;
+              font-size: 1rem;
+              padding: 14px 32px;
+              white-space: nowrap;
+              text-decoration: none;
+              border: none;
+              box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            }
+            @media (min-width: 768px) {
+              .hero-btn-mobile { display: none; }
             }
           `}</style>
         </section>
