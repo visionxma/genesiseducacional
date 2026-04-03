@@ -8,35 +8,19 @@ import { Menu, X } from "lucide-react";
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+  const [scrolled, setScrolled] = useState(false);
+
   const isActive = (path: string) => pathname === path;
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <>
-      <header
-        style={{
-          position: 'fixed',
-          top: 12,
-          zIndex: 100,
-          maxWidth: 1200,
-          width: 'calc(100% - 24px)',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          background: 'var(--site-primary)',
-          backgroundImage: `
-            linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)
-          `,
-          backgroundRepeat: 'repeat',
-          backgroundSize: '40px 40px',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-          borderRadius: 0,
-          border: '1px solid rgba(255, 255, 255, 0.15)',
-          boxShadow: '0 4px 24px rgba(0, 68, 204, 0.25)',
-          transition: 'all 0.3s ease',
-        }}
-      >
+      <header className={scrolled ? 'site-header site-header--scrolled' : 'site-header'}>
         <div className="container" style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -155,11 +139,53 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           </div>
         )}
         
-        {/* Helper class inline specifically for this layout usando forma segura */}
         <style>{`
-          @media (min-width: 900px) { 
-            .md-flex { display: flex !important; } 
+          @media (min-width: 900px) {
+            .md-flex { display: flex !important; }
             .mobile-only { display: none !important; }
+          }
+
+          /* ── Header animation ── */
+          .site-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            max-width: 100%;
+            z-index: 100;
+            background: var(--site-primary);
+            background-image:
+              linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-repeat: repeat;
+            background-size: 40px 40px;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-top: none;
+            box-shadow: none;
+            will-change: top, width, box-shadow, transform;
+            transition:
+              top      0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              width    0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              left     0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s ease,
+              border-radius 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+          }
+
+          .site-header--scrolled {
+            top: 12px;
+            left: 50%;
+            width: calc(100% - 48px);
+            max-width: 1200px;
+            transform: translateX(-50%);
+            border-radius: 0px;
+            border: 1px solid rgba(255,255,255,0.18);
+            box-shadow:
+              0 2px 8px rgba(0,0,0,0.08),
+              0 8px 32px rgba(0, 68, 204, 0.22),
+              0 0 0 1px rgba(0,68,204,0.08);
           }
         `}</style>
       </header>

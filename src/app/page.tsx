@@ -1,86 +1,72 @@
 import PublicLayout from './components/PublicLayout';
 import Link from 'next/link';
 import PilaresCarousel from './components/PilaresCarousel';
-import { ArrowRight, Zap, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
 export default function Home() {
   return (
     <PublicLayout>
       <main className="animate-fade-up" style={{ display: 'flex', flexDirection: 'column', background: 'var(--site-bg)' }}>
 
-        <section className="glass-section-white" style={{ 
-          padding: '120px 0 0',
-          position: 'relative', 
-          overflow: 'hidden',
-          background: 'none'
-        }}>
-          {/* BACKGROUND BACKGROUND */}
-          <div style={{
-            position: 'absolute', inset: 0,
-            backgroundImage: "url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1600&q=80')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundAttachment: 'fixed',
-            opacity: 0.4,
-          }} />
-          <div className="hero-overlay" />
-          <div className="glow-point" style={{ top: '-10%', left: '10%' }} />
-          <div className="glow-point" style={{ bottom: '-10%', right: '10%' }} />
-
-          <div className="container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-            <div className="animate-float" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 20px', background: 'white', border: '1px solid var(--site-border)', borderRadius: 0, fontSize: '0.9rem', fontWeight: 600, color: 'var(--site-primary)', marginBottom: 24, boxShadow: 'var(--site-shadow-sm)' }}>
-              <Zap size={16} fill="var(--site-primary)" /> Novos Polos EAD Abertos no Maranhão
-            </div>
-
-            <h1 style={{ maxWidth: 940, margin: '0 auto 20px', fontSize: 'clamp(2.5rem, 6vw, 4.4rem)', lineHeight: 1.05 }}>
-              Referência em <span style={{ color: 'var(--site-primary)' }}>Impacto Social</span> e Formação Profissional
-            </h1>
-
-            <p style={{ maxWidth: 720, margin: '0 auto 40px', fontSize: '1.35rem', color: 'var(--site-text-secondary)', fontWeight: 400, transform: 'translateY(10px)' }}>
-              Metodologias inovadoras e programas acadêmicos reconhecidos, construindo caminhos reais para a juventude e a agricultura do campo.
-            </p>
-
-            <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 60 }}>
-              <Link href="/cursos" className="btn btn-primary" style={{ padding: '18px 44px', fontSize: '1.1rem' }}>
-                Conhecer Nossos Cursos <ArrowRight size={20} />
-              </Link>
-              <Link href="/cursos" className="btn btn-glass" style={{ padding: '18px 44px', fontSize: '1.1rem' }}>
-                Cursos Técnicos
-              </Link>
-            </div>
-
+        {/* HERO — imagem pura com botões sobrepostos */}
+        <section style={{ width: '100%', position: 'relative' }}>
+          <picture>
+            <source media="(max-width: 767px)" srcSet="/HeroCelular.jpg" />
+            <img
+              src="/Hero-Carousel - Copia.jpg"
+              alt="Gênesis Educacional — Conquiste sua melhor versão"
+              style={{ width: '100%', display: 'block', objectFit: 'cover' }}
+            />
+          </picture>
+          <div className="hero-btns">
+            <Link href="/cursos" className="btn btn-primary" style={{ padding: '12px 24px', fontSize: '0.9rem' }}>
+              Conhecer Nossos Cursos <ArrowRight size={16} />
+            </Link>
+            <Link href="/blog" className="btn" style={{ padding: '12px 24px', fontSize: '0.9rem', background: 'white', color: 'var(--site-primary)', border: 'none' }}>
+              Blog
+            </Link>
           </div>
-          
-          {/* Infinite Metrics Ticker — Full Width Divider */}
-          <div className="ticker-wrap">
-            <div className="ticker">
-              {[
-                { label: 'Unidades Ativas', value: '18' },
-                { label: 'Alunos Impactados', value: '+5.000' },
-                { label: 'Rede de Polos EAD', value: '+30' },
-                { label: 'Anos de Tradição', value: '11' },
-              ].concat([
-                { label: 'Unidades Ativas', value: '18' },
-                { label: 'Alunos Impactados', value: '+5.000' },
-                { label: 'Rede de Polos EAD', value: '+30' },
-                { label: 'Anos de Tradição', value: '11' },
-              ]).map((stat, i) => (
-                <div key={i} className="ticker-item">
-                  <span className="ticker-item-label">{stat.label}</span>
-                  <span className="ticker-item-value">{stat.value}</span>
-                  <div className="ticker-dot" />
-                </div>
-              ))}
-            </div>
-          </div>
+          <style>{`
+            .hero-btns {
+              display: none;
+            }
+            @media (min-width: 768px) {
+              .hero-btns {
+                display: flex;
+                gap: 12px;
+                position: absolute;
+                top: 78%;
+                right: 8%;
+                transform: translateY(-50%);
+              }
+            }
+          `}</style>
         </section>
 
-        {/* 2. PILARES — Carrossel com foto de fundo */}
-        <section style={{ overflow: 'hidden' }}>
-          <PilaresCarousel />
-        </section>
+        {/* TICKER — Barra rolante */}
+        <div className="ticker-wrap">
+          <div className="ticker">
+            {[
+              { label: 'Unidades Ativas', value: '18' },
+              { label: 'Alunos Impactados', value: '+5.000' },
+              { label: 'Rede de Polos EAD', value: '+30' },
+              { label: 'Anos de Tradição', value: '11' },
+            ].concat([
+              { label: 'Unidades Ativas', value: '18' },
+              { label: 'Alunos Impactados', value: '+5.000' },
+              { label: 'Rede de Polos EAD', value: '+30' },
+              { label: 'Anos de Tradição', value: '11' },
+            ]).map((stat, i) => (
+              <div key={i} className="ticker-item">
+                <span className="ticker-item-label">{stat.label}</span>
+                <span className="ticker-item-value">{stat.value}</span>
+                <div className="ticker-dot" />
+              </div>
+            ))}
+          </div>
+        </div>
 
-        {/* 3. METODOLOGIA — Glass White */}
+        {/* 2. METODOLOGIA — Glass White */}
         <section className="glass-section-white section-padding">
           <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(380px, 100%), 1fr))', gap: 80, alignItems: 'center' }}>
             <div>
@@ -112,6 +98,11 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </section>
+
+        {/* 3. PILARES — Carrossel com foto de fundo */}
+        <section style={{ overflow: 'hidden' }}>
+          <PilaresCarousel />
         </section>
 
         {/* 4. CTA — Azul sólido */}

@@ -9,42 +9,42 @@ const pilares = [
     title: 'Cursos Técnicos & Pós-Técnico',
     desc: 'Formações técnicas e pós-técnicas com polos estruturados no interior do Maranhão, Pará e todo o Brasil, levando educação profissional de qualidade para onde ela é mais necessária.',
     color: '#0044CC',
-    image: 'https://static.poder360.com.br/2024/05/ead-garota-professora-ensino-a-distancia-2-848x477.png', // Universidade / Biblioteca
+    image: '/carousel/cursostec.jpg',
   },
   {
     icon: Leaf,
     title: 'Agricultura Regenerativa',
     desc: 'Assistência técnica e acompanhamento direto para quintais produtivos e propriedades agroecológicas, promovendo soberania alimentar e sustentabilidade ambiental.',
     color: '#059669',
-    image: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1600&q=80',
+    image: '/carousel/agricultura.jpg',
   },
   {
     icon: Users,
     title: 'Educação Popular',
     desc: 'Cursos técnicos desenvolvidos com foco na realidade das comunidades rurais, quilombolas e ribeirinhas, respeitando seus saberes e fortalecendo sua autonomia.',
     color: '#D97706',
-    image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1600&q=80',
+    image: '/images/acompanhamento.png',
   },
   {
     icon: HeartHandshake,
     title: 'Economia Solidária',
     desc: 'Gestão de cooperativas, redes de escoamento da produção familiar e articulação de mercados justos que valorizam o trabalho coletivo e a produção sustentável.',
     color: '#7C3AED',
-    image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1600&q=80',
+    image: '/images/blog_mulheres.png',
   },
   {
     icon: Laptop,
     title: 'Inclusão Digital Jovem',
     desc: 'Capacitação em informática básica, produção digital e autonomia tecnológica para jovens rurais, abrindo portas para o mercado de trabalho e o empreendedorismo.',
     color: '#0891B2',
-    image: 'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=1600&q=80',
+    image: '/carousel/inclusao.jpg',
   },
   {
     icon: LineChart,
     title: 'Consultoria Estratégica',
     desc: 'Planejamento metodológico, elaboração de projetos e captação de recursos para prefeituras, OSCs e movimentos sociais que buscam impacto real e sustentável.',
     color: '#DB2777',
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1600&q=80',
+    image: '/carousel/consultoria.jpg',
   },
 ];
 
@@ -143,29 +143,15 @@ export default function PilaresCarousel() {
         </p>
       </div>
 
-      {/* Navigation Arrows */}
-      <button onClick={prev} style={{
-        position: 'absolute', left: 24, top: '50%', transform: 'translateY(-50%)',
-        zIndex: 3, background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.25)',
-        borderRadius: 0, width: 52, height: 52,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: 'white', cursor: 'pointer', transition: 'all 0.2s ease',
-      }}
+      {/* Navigation Arrows — ocultos no mobile, visíveis no desktop */}
+      <button onClick={prev} className="carousel-arrow carousel-arrow-left"
         onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.25)')}
         onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.15)')}
       >
         <ChevronLeft size={22} />
       </button>
 
-      <button onClick={next} style={{
-        position: 'absolute', right: 24, top: '50%', transform: 'translateY(-50%)',
-        zIndex: 3, background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.25)',
-        borderRadius: 0, width: 52, height: 52,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: 'white', cursor: 'pointer', transition: 'all 0.2s ease',
-      }}
+      <button onClick={next} className="carousel-arrow carousel-arrow-right"
         onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.25)')}
         onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.15)')}
       >
@@ -187,6 +173,34 @@ export default function PilaresCarousel() {
           }} />
         ))}
       </div>
+
+      <style>{`
+        .carousel-arrow {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          zIndex: 3;
+          background: rgba(255,255,255,0.15);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255,255,255,0.25);
+          border-radius: 0;
+          width: 52px;
+          height: 52px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        .carousel-arrow-left { left: 24px; }
+        .carousel-arrow-right { right: 24px; }
+
+        @media (max-width: 640px) {
+          .carousel-arrow { display: none; }
+        }
+      `}</style>
     </div>
   );
 }
