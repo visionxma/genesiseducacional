@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react";
+import VisitorTracker from "@/components/VisitorTracker";
 import "./globals.css";
 
 const siteUrl = "https://genesiseducacional.com.br";
@@ -120,7 +122,9 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <VisitorTracker />
         {children}
+        <Analytics />
       </body>
     </html>
   );

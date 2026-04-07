@@ -54,10 +54,16 @@ export default function AdminLogin() {
       display: 'flex', 
       alignItems: 'center', 
       justifyContent: 'center', 
-      backgroundColor: 'var(--site-bg)',
-      backgroundImage: "url('/texture.svg')",
-      backgroundSize: '300px'
+      backgroundColor: '#0044CC',
+      backgroundImage: 'linear-gradient(135deg, #0044CC 0%, #0033aa 50%, #002288 100%)',
+      position: 'relative'
     }}>
+      {/* Decorative Grid Overlay */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
+        backgroundSize: '40px 40px', pointerEvents: 'none', zIndex: 0
+      }} />
       <div style={{
         width: '100%', 
         maxWidth: '440px', 

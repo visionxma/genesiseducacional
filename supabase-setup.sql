@@ -18,11 +18,38 @@ CREATE TABLE IF NOT EXISTS transparency_records (
   valor            text,
   valor_emenda     text,
   prestacao_contas text,
+  pdf_url          text,
   created_at       timestamptz DEFAULT now()
 );
 
+-- Se a tabela já existe, adicione a coluna pdf_url:
+ALTER TABLE transparency_records ADD COLUMN IF NOT EXISTS pdf_url text;
+
 -- 2. Habilita RLS
 ALTER TABLE transparency_records ENABLE ROW LEVEL SECURITY;
+
+-- 2b. Cria o bucket 'documents' para armazenar PDFs
+INSERT INTO storage.buckets (id, name, public) VALUES ('documents', 'documents', true) ON CONFLICT (id) DO NOTHING;
+
+-- Política de leitura pública para o bucket documents
+DROP POLICY IF EXISTS "Public read documents" ON storage.objects;
+CREATE POLICY "Public read documents"
+  ON storage.objects FOR SELECT
+  USING (bucket_id = 'documents');
+
+-- Política de upload para usuários autenticados
+DROP POLICY IF EXISTS "Authenticated upload documents" ON storage.objects;
+CREATE POLICY "Authenticated upload documents"
+  ON storage.objects FOR INSERT
+  TO authenticated
+  WITH CHECK (bucket_id = 'documents');
+
+-- Política de delete para usuários autenticados
+DROP POLICY IF EXISTS "Authenticated delete documents" ON storage.objects;
+CREATE POLICY "Authenticated delete documents"
+  ON storage.objects FOR DELETE
+  TO authenticated
+  USING (bucket_id = 'documents');
 
 -- 3. Qualquer visitante pode LER (página pública)
 DROP POLICY IF EXISTS "Public read transparency_records" ON transparency_records;

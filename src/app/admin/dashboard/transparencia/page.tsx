@@ -18,8 +18,12 @@
  *     valor text,
  *     valor_emenda text,
  *     prestacao_contas text,
+ *     pdf_url text,
  *     created_at timestamptz DEFAULT now()
  *   );
+ *
+ *   -- Se a tabela já existe, adicione a coluna:
+ *   -- ALTER TABLE transparency_records ADD COLUMN IF NOT EXISTS pdf_url text;
  *
  *   ALTER TABLE transparency_records ENABLE ROW LEVEL SECURITY;
  *   CREATE POLICY "Public read" ON transparency_records FOR SELECT USING (true);
@@ -31,8 +35,11 @@ import { createPortal } from 'react-dom';
 import { useEffect, useState } from 'react';
 import {
   ShieldCheck, Plus, Trash2, Edit3, Loader2, FolderOpen,
-  AlertCircle, CheckCircle2, Search, X, Save,
+  AlertCircle, CheckCircle2, Search, X, Save, File, FileText,
+  Calendar, Building2, DollarSign, User, Landmark, Hash
 } from 'lucide-react';
+
+const PDF_BUCKET = 'documents';
 
 interface TransparencyRecord {
   id: string;
@@ -47,6 +54,7 @@ interface TransparencyRecord {
   valor: string | null;
   valor_emenda: string | null;
   prestacao_contas: string | null;
+  pdf_url: string | null;
   created_at: string;
 }
 
@@ -62,6 +70,7 @@ const EMPTY_FORM = {
   valor: '',
   valor_emenda: '',
   prestacao_contas: '',
+  pdf_url: '',
 };
 
 export default function TransparenciaAdmin() {
@@ -122,6 +131,7 @@ export default function TransparenciaAdmin() {
       valor: r.valor || '',
       valor_emenda: r.valor_emenda || '',
       prestacao_contas: r.prestacao_contas || '',
+      pdf_url: r.pdf_url || '',
     });
     setShowEditor(true);
   }
@@ -145,6 +155,7 @@ export default function TransparenciaAdmin() {
       valor: form.valor || null,
       valor_emenda: form.valor_emenda || null,
       prestacao_contas: form.prestacao_contas || null,
+      pdf_url: form.pdf_url || null,
     };
 
     if (editingRecord) {
@@ -250,76 +261,95 @@ export default function TransparenciaAdmin() {
         </div>
       )}
 
-      {/* Table */}
-      <div className="glass-card admin-animate-in-delay-1">
-        <div className="glass-card-body" style={{ padding: '0 0 28px', overflowX: 'auto' }}>
-          {loading ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 18, padding: '28px' }}>
-              {[1,2,3].map(i => <div key={i} className="admin-skeleton" style={{ height: 24, width: `${90-i*8}%` }} />)}
-            </div>
-          ) : filtered.length === 0 ? (
+      {/* Data Cards Grid */}
+      <div className="admin-animate-in-delay-1" style={{ paddingBottom: 60 }}>
+        {loading ? (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '24px' }}>
+            {[1, 2, 3, 4, 5, 6].map(i => (
+              <div key={i} className="glass-card" style={{ height: 260 }}>
+                <div className="admin-skeleton" style={{ height: '100%', width: '100%' }} />
+              </div>
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="glass-card">
             <div className="admin-empty-state">
-              <div className="admin-empty-state-icon"><FolderOpen size={24} /></div>
-              <div className="admin-empty-state-text">{records.length === 0 ? 'Nenhum registro adicionado' : 'Nenhum resultado'}</div>
-              <div className="admin-empty-state-hint">{records.length === 0 ? 'Adicione o primeiro registro de transparência.' : 'Tente outra busca.'}</div>
+              <div className="admin-empty-state-icon"><FolderOpen size={32} /></div>
+              <div className="admin-empty-state-text" style={{ fontSize: '1.2rem', marginTop: 12 }}>{records.length === 0 ? 'Nenhum registro adicionado' : 'Nenhum resultado para a busca'}</div>
+              <div className="admin-empty-state-hint">{records.length === 0 ? 'Adicione o primeiro registro para começar a popular o painel de transparência.' : 'Tente buscar com outros termos.'}</div>
             </div>
-          ) : (
-            <table className="admin-table" style={{ minWidth: 1100 }}>
-              <thead>
-                <tr>
-                  <th>Proponente</th>
-                  <th>Parlamentar</th>
-                  <th>Modalidade</th>
-                  <th>Objeto</th>
-                  <th>Órgão Concedente</th>
-                  <th>Nº Instrumento</th>
-                  <th>Nº Emenda</th>
-                  <th>Ano</th>
-                  <th>Valor</th>
-                  <th>Valor Emenda</th>
-                  <th>Prestação de Contas</th>
-                  <th style={{ textAlign: 'right' }}>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map(r => (
-                  <tr key={r.id}>
-                    <td className="cell-primary" style={{ whiteSpace: 'nowrap' }}>{r.proponente || '—'}</td>
-                    <td style={{ whiteSpace: 'nowrap', color: 'var(--admin-text-secondary)', fontSize: '0.82rem' }}>{r.parlamentar || '—'}</td>
-                    <td style={{ whiteSpace: 'nowrap', color: 'var(--admin-text-secondary)', fontSize: '0.82rem' }}>{r.modalidade || '—'}</td>
-                    <td style={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--admin-text-secondary)', fontSize: '0.82rem' }} title={r.objeto || ''}>{r.objeto || '—'}</td>
-                    <td style={{ whiteSpace: 'nowrap', color: 'var(--admin-text-secondary)', fontSize: '0.82rem' }}>{r.orgao_concedente || '—'}</td>
-                    <td style={{ whiteSpace: 'nowrap', fontSize: '0.82rem' }}>{r.num_instrumento || '—'}</td>
-                    <td style={{ whiteSpace: 'nowrap', fontSize: '0.82rem' }}>{r.num_emenda || '—'}</td>
-                    <td style={{ whiteSpace: 'nowrap', fontSize: '0.82rem' }}>{r.ano_emenda || '—'}</td>
-                    <td style={{ whiteSpace: 'nowrap', fontWeight: 600, fontSize: '0.85rem' }}>{r.valor || '—'}</td>
-                    <td style={{ whiteSpace: 'nowrap', fontWeight: 600, fontSize: '0.85rem' }}>{r.valor_emenda || '—'}</td>
-                    <td style={{ fontSize: '0.82rem', whiteSpace: 'nowrap' }}>
-                      {r.prestacao_contas
-                        ? <span title={r.prestacao_contas} style={{
-                            display: 'inline-block', padding: '3px 10px',
-                            background: 'rgba(43,68,255,0.08)', color: 'var(--admin-primary)',
-                            borderRadius: 'var(--admin-radius-sm)', fontWeight: 600, maxWidth: 180,
-                            overflow: 'hidden', textOverflow: 'ellipsis', verticalAlign: 'middle',
-                          }}>{r.prestacao_contas}</span>
-                        : <span style={{ color: 'var(--admin-text-tertiary)' }}>—</span>}
-                    </td>
-                    <td style={{ textAlign: 'right' }}>
-                      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 4 }}>
-                        <button className="admin-btn admin-btn-icon" title="Editar" onClick={() => openEdit(r)}><Edit3 size={16} /></button>
-                        <button className="admin-btn admin-btn-icon" title="Remover"
-                          style={{ color: deletingId === r.id ? 'var(--admin-text-tertiary)' : 'var(--admin-danger)' }}
-                          onClick={() => handleDelete(r.id)} disabled={deletingId === r.id}>
-                          {deletingId === r.id ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <Trash2 size={16} />}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '24px' }}>
+            {filtered.map(r => (
+              <div key={r.id} className="glass-card" style={{ display: 'flex', flexDirection: 'column' }}>
+                <div style={{ padding: '20px 24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: 1 }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+                    {r.modalidade && (
+                      <span style={{ padding: '4px 10px', fontSize: '0.7rem', fontWeight: 700, background: 'var(--admin-primary-subtle)', color: 'var(--admin-primary)', borderRadius: 'var(--admin-radius-sm)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        {r.modalidade}
+                      </span>
+                    )}
+                    {r.ano_emenda && (
+                      <span style={{ padding: '4px 10px', fontSize: '0.7rem', fontWeight: 600, background: 'var(--admin-bg)', color: 'var(--admin-text-secondary)', border: '1px solid var(--admin-border)', borderRadius: 0, display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <Calendar size={12} /> {r.ano_emenda}
+                      </span>
+                    )}
+                  </div>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--admin-text-primary)', marginBottom: 16, lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    {r.objeto || 'Sem descrição do objeto'}
+                  </h3>
+                  {r.proponente && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.85rem', color: 'var(--admin-text-secondary)', marginTop: 'auto' }}>
+                      <Building2 size={14} style={{ color: 'var(--admin-text-tertiary)', flexShrink: 0 }} />
+                      <span style={{ fontWeight: 500 }}>{r.proponente}</span>
+                    </div>
+                  )}
+                </div>
+                
+                <div style={{ padding: '16px 24px', borderTop: '1px solid var(--admin-border)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 20px', background: 'rgba(0,0,0,0.015)' }}>
+                  <div>
+                    <div style={{ fontSize: '0.68rem', fontWeight: 600, color: 'var(--admin-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <DollarSign size={11} /> Valor Restante / Total
+                    </div>
+                    <div style={{ fontSize: '1.05rem', fontFamily: 'Outfit, sans-serif', fontWeight: 700, color: r.valor ? 'var(--admin-primary)' : 'var(--admin-text-tertiary)' }}>
+                      {r.valor || '—'}
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.68rem', fontWeight: 600, color: 'var(--admin-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <DollarSign size={11} /> Valor Emenda
+                    </div>
+                    <div style={{ fontSize: '1.05rem', fontFamily: 'Outfit, sans-serif', fontWeight: 700, color: r.valor_emenda ? 'var(--admin-success)' : 'var(--admin-text-tertiary)' }}>
+                      {r.valor_emenda || '—'}
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ padding: '12px 24px', borderTop: '1px solid var(--admin-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--admin-surface)' }}>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                     {r.pdf_url && (
+                        <a href={r.pdf_url} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '6px 12px', background: 'rgba(220,38,38,0.08)', color: '#dc2626', borderRadius: 0, fontWeight: 600, textDecoration: 'none', fontSize: '0.75rem', transition: 'all 0.2s' }}>
+                          <FileText size={13} /> PDF
+                        </a>
+                     )}
+                     {r.prestacao_contas && (
+                         <span title={r.prestacao_contas} style={{ display: 'inline-flex', padding: '6px 12px', background: 'rgba(43,68,255,0.08)', color: 'var(--admin-primary)', borderRadius: 0, fontWeight: 600, maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '0.75rem' }}>
+                           Links / Contas
+                         </span>
+                     )}
+                  </div>
+                  <div style={{ display: 'flex', gap: 6 }}>
+                     <button className="admin-btn admin-btn-icon" onClick={() => openEdit(r)} title="Editar"><Edit3 size={16} /></button>
+                     <button className="admin-btn admin-btn-icon" onClick={() => handleDelete(r.id)} style={{ color: deletingId === r.id ? 'var(--admin-text-tertiary)' : 'var(--admin-danger)' }} disabled={deletingId === r.id}>
+                       {deletingId === r.id ? <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <Trash2 size={16} />}
+                     </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Editor Panel */}
@@ -405,6 +435,18 @@ export default function TransparenciaAdmin() {
                   <p style={{ fontSize: '0.72rem', color: 'var(--admin-text-tertiary)', marginTop: 6 }}>
                     Se for uma URL, vira link clicável automaticamente na página pública.
                   </p>
+                </div>
+
+                {/* PDF Upload */}
+                <div style={{ gridColumn: '1 / -1', borderTop: '1px solid var(--admin-border)', paddingTop: 12, marginTop: 4 }}>
+                  <p style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--admin-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <File size={13} /> Link do Documento PDF
+                  </p>
+
+                  <div style={{ marginTop: 10 }}>
+                    <p style={{ fontSize: '0.72rem', color: 'var(--admin-text-tertiary)', marginBottom: 6 }}>Cole a URL do PDF (Google Drive, Dropbox, etc):</p>
+                    <input type="text" className="admin-input" placeholder="https://exemplo.com/documento.pdf" value={form.pdf_url} onChange={field('pdf_url')} />
+                  </div>
                 </div>
               </div>
 

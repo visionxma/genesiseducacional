@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import {
   FileText,
-  Tag,
   BookOpen,
   ShieldCheck,
   ArrowRight,
@@ -12,7 +11,6 @@ import {
   Zap,
   BarChart3,
   Clock,
-  Upload,
   Newspaper,
   Loader2,
 } from 'lucide-react';
@@ -20,13 +18,7 @@ import {
 interface Post {
   id: string;
   title: string;
-  category_id: string | null;
   created_at: string;
-}
-
-interface Category {
-  id: string;
-  name: string;
 }
 
 export default function DashboardOverview() {
@@ -34,43 +26,32 @@ export default function DashboardOverview() {
   const [loading, setLoading] = useState(true);
 
   const [postCount, setPostCount] = useState(0);
-  const [categoryCount, setCategoryCount] = useState(0);
   const [courseCount, setCourseCount] = useState(0);
   const [docCount, setDocCount] = useState(0);
 
   const [recentPosts, setRecentPosts] = useState<Post[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     setMounted(true);
     async function fetchData() {
-      const [postsRes, catsRes, coursesRes, docsRes, recentRes] = await Promise.all([
+      const [postsRes, coursesRes, docsRes, recentRes] = await Promise.all([
         supabase.from('posts').select('*', { count: 'exact', head: true }),
-        supabase.from('categories').select('*', { count: 'exact', head: true }),
         supabase.from('courses').select('*', { count: 'exact', head: true }),
         supabase.from('transparency_records').select('*', { count: 'exact', head: true }),
-        supabase.from('posts').select('id, title, category_id, created_at').order('created_at', { ascending: false }).limit(5),
+        supabase.from('posts').select('id, title, created_at').order('created_at', { ascending: false }).limit(5),
       ]);
 
       setPostCount(postsRes.count ?? 0);
-      setCategoryCount(catsRes.count ?? 0);
       setCourseCount(coursesRes.count ?? 0);
       setDocCount(docsRes.count ?? 0);
       if (recentRes.data) setRecentPosts(recentRes.data);
-
-      // Fetch category names for recent posts
-      const { data: cats } = await supabase.from('categories').select('id, name');
-      if (cats) setCategories(cats);
 
       setLoading(false);
     }
     fetchData();
   }, []);
 
-  function getCategoryName(catId: string | null) {
-    if (!catId) return 'Sem categoria';
-    return categories.find(c => c.id === catId)?.name || 'Geral';
-  }
+
 
   function formatDate(d: string) {
     return new Date(d).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -78,7 +59,6 @@ export default function DashboardOverview() {
 
   const stats = [
     { label: 'Total de Posts', value: postCount, icon: FileText, colorClass: 'primary', href: '/admin/dashboard/posts' },
-    { label: 'Categorias', value: categoryCount, icon: Tag, colorClass: 'success', href: '/admin/dashboard/categories' },
     { label: 'Cursos', value: courseCount, icon: BookOpen, colorClass: 'warning', href: '/admin/dashboard/cursos' },
     { label: 'Documentos', value: docCount, icon: ShieldCheck, colorClass: 'info', href: '/admin/dashboard/transparencia' },
   ];
@@ -149,7 +129,7 @@ export default function DashboardOverview() {
                     <div className="recent-post-thumb"><FileText size={20} /></div>
                     <div className="recent-post-info">
                       <div className="recent-post-title">{post.title}</div>
-                      <div className="recent-post-meta">{getCategoryName(post.category_id)} • {formatDate(post.created_at)}</div>
+                      <div className="recent-post-meta">{formatDate(post.created_at)}</div>
                     </div>
                     <span className="recent-post-status published">Publicado</span>
                   </div>
@@ -177,12 +157,6 @@ export default function DashboardOverview() {
             </Link>
             <Link href="/admin/dashboard/transparencia" className="quick-action-btn ghost">
               <ShieldCheck size={18} /> Documentos Públicos
-            </Link>
-            <Link href="/admin/dashboard/categories" className="quick-action-btn ghost">
-              <Tag size={18} /> Categorias
-            </Link>
-            <Link href="/admin/dashboard/media" className="quick-action-btn ghost">
-              <Upload size={18} /> Upload de Mídia
             </Link>
             <Link href="/admin/dashboard/analytics" className="quick-action-btn ghost">
               <BarChart3 size={18} /> Analytics
