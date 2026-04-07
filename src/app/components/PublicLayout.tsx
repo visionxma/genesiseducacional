@@ -98,45 +98,62 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
 
         {/* MOBILE NAV DROPDOWN */}
         {isMobileMenuOpen && (
-          <div className="mobile-only" style={{
-            position: 'absolute',
-            top: '68px',
-            left: 0,
-            right: 0,
-            background: 'var(--site-primary)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-            padding: '24px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-            borderRadius: '0 0 12px 12px',
-            zIndex: 90
-          }}>
-            {[
-              { label: 'Início', path: '/' },
-              { label: 'Cursos', path: '/cursos' },
-              { label: 'Consultoria', path: '/consultoria' },
-              { label: 'Blog', path: '/blog' },
-              { label: 'Transparência', path: '/transparencia' },
-            ].map((item) => (
-              <Link
-                key={item.label}
-                href={item.path}
-                onClick={() => setIsMobileMenuOpen(false)}
-                style={{
-                  color: isActive(item.path) ? 'white' : 'rgba(255,255,255,0.75)',
-                  fontWeight: isActive(item.path) ? 700 : 500,
-                  fontSize: '1.2rem',
-                  padding: '12px 0',
-                  borderBottom: '1px solid rgba(255,255,255,0.05)',
-                  textDecoration: 'none'
-                }}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
+          <>
+            <div 
+              style={{
+                position: 'fixed',
+                inset: 0,
+                background: 'rgba(0,0,0,0.5)',
+                backdropFilter: 'blur(4px)',
+                zIndex: 80
+              }}
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+            <div className="mobile-only" style={{
+              position: 'absolute',
+              top: '100%',
+              left: 0,
+              right: 0,
+              background: 'var(--site-primary)',
+              borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+              boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+              borderRadius: scrolled ? '0 0 16px 16px' : '0 0 0 0',
+              zIndex: 90,
+              animation: 'mobileMenuFadeIn 0.3s ease-out forwards'
+            }}>
+              {[
+                { label: 'Início', path: '/' },
+                { label: 'Cursos', path: '/cursos' },
+                { label: 'Consultoria', path: '/consultoria' },
+                { label: 'Blog', path: '/blog' },
+                { label: 'Transparência', path: '/transparencia' },
+              ].map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.path}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  style={{
+                    color: isActive(item.path) ? 'white' : 'rgba(255,255,255,0.7)',
+                    fontWeight: isActive(item.path) ? 700 : 500,
+                    fontSize: '1.1rem',
+                    padding: '16px 0',
+                    borderBottom: '1px solid rgba(255,255,255,0.05)',
+                    textDecoration: 'none',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}
+                >
+                  {item.label}
+                  {isActive(item.path) && <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'white' }} />}
+                </Link>
+              ))}
+            </div>
+          </>
         )}
         
         <style>{`
@@ -186,6 +203,10 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               0 2px 8px rgba(0,0,0,0.08),
               0 8px 32px rgba(0, 68, 204, 0.22),
               0 0 0 1px rgba(0,68,204,0.08);
+          }
+          @keyframes mobileMenuFadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
           }
         `}</style>
       </header>

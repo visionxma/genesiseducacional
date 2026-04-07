@@ -268,8 +268,8 @@ export default function Transparencia() {
                 ) : (
                   <div style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))',
-                    gap: 20,
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(min(420px, 100%), 1fr))',
+                    gap: '24px',
                   }}>
                     {filtered.map((r, idx) => {
                       const isExpanded = expandedId === r.id;

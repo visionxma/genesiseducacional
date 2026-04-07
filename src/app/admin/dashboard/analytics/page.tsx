@@ -7,22 +7,32 @@ import { supabase } from '@/lib/supabase';
 export default function AnalyticsPage() {
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [timeRange, setTimeRange] = useState('6m'); // '7d', '30d', '6m', '1y'
 
   const [totals, setTotals] = useState({ views: 0, users: 0, time: 0 });
-  const [monthlyData, setMonthlyData] = useState<{monthStr: string, views: number}[]>([]);
+  const [chartData, setChartData] = useState<{label: string, views: number}[]>([]);
 
   useEffect(() => {
     setMounted(true);
     async function loadData() {
-      // Ignorar erro se a tabela ainda não existir para não quebrar a página
-      const { data: visits, error } = await supabase.from('page_visits').select('session_id, duration_seconds, created_at');
+      setLoading(true);
+      
+      const now = new Date();
+      let startDate = new Date();
+      
+      if (timeRange === '7d') startDate.setDate(now.getDate() - 7);
+      else if (timeRange === '30d') startDate.setDate(now.getDate() - 30);
+      else if (timeRange === '6m') startDate.setMonth(now.getMonth() - 6);
+      else if (timeRange === '1y') startDate.setFullYear(now.getFullYear() - 1);
+
+      const { data: visits, error } = await supabase
+        .from('page_visits')
+        .select('session_id, duration_seconds, created_at')
+        .gte('created_at', startDate.toISOString());
       
       if (error || !visits) {
         setLoading(false);
-        // Fallback p/ 0 se tabela não criada
-        setMonthlyData([
-          { monthStr: 'Passado', views: 0 }, { monthStr: 'Atual', views: 0 }
-        ]);
+        setChartData([{ label: 'Sem dados', views: 0 }]);
         return;
       }
 
@@ -40,34 +50,47 @@ export default function AnalyticsPage() {
       
       setTotals({ views, users, time });
       
-      // Construir os últimos 6 meses para o gráfico
-      const monthsMap = new Map();
-      const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+      const chartMap = new Map();
       
-      for(let i = 5; i >= 0; i--) {
-        const d = new Date();
-        d.setMonth(d.getMonth() - i);
-        // key = Ano-Mes para garantir unicidade, ex: "2026-3"
-        const key = `${d.getFullYear()}-${d.getMonth()}`;
-        monthsMap.set(key, { monthStr: monthNames[d.getMonth()], views: 0 });
+      if (timeRange === '7d' || timeRange === '30d') {
+        const days = timeRange === '7d' ? 7 : 30;
+        for(let i = days - 1; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(now.getDate() - i);
+          const key = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+          chartMap.set(key, { label: key, views: 0 });
+        }
+        
+        visits.forEach((v: any) => {
+          const key = new Date(v.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+          if (chartMap.has(key)) chartMap.get(key).views += 1;
+        });
+      } else {
+        const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+        const months = timeRange === '6m' ? 6 : 12;
+        
+        for(let i = months - 1; i >= 0; i--) {
+          const d = new Date();
+          d.setMonth(now.getMonth() - i);
+          const key = `${d.getFullYear()}-${d.getMonth()}`;
+          chartMap.set(key, { label: monthNames[d.getMonth()], views: 0 });
+        }
+        
+        visits.forEach((v: any) => {
+          const d = new Date(v.created_at);
+          const key = `${d.getFullYear()}-${d.getMonth()}`;
+          if (chartMap.has(key)) chartMap.get(key).views += 1;
+        });
       }
       
-      visits.forEach((v: any) => {
-        const d = new Date(v.created_at);
-        const key = `${d.getFullYear()}-${d.getMonth()}`;
-        if (monthsMap.has(key)) {
-          monthsMap.get(key).views += 1;
-        }
-      });
-      
-      setMonthlyData(Array.from(monthsMap.values()));
+      setChartData(Array.from(chartMap.values()));
       setLoading(false);
     }
 
     loadData();
-  }, []);
+  }, [timeRange]);
 
-  const maxViews = Math.max(5, ...monthlyData.map(d => d.views)); // Min 5 p/ barra não estourar no zero
+  const maxViews = Math.max(5, ...chartData.map((d: any) => d.views)); // Min 5 p/ barra não estourar no zero
 
   const formatTime = (seconds: number) => {
     if (seconds < 60) return `${seconds}s`;
@@ -91,9 +114,17 @@ export default function AnalyticsPage() {
         </div>
         
         <div style={{ display: 'flex', gap: 12 }}>
-          <button className="admin-btn" style={{ background: 'var(--admin-surface)', border: '1px solid var(--admin-border)', color: 'var(--admin-text-primary)' }}>
-            Últimos 6 meses
-          </button>
+          <select 
+            value={timeRange} 
+            onChange={(e) => setTimeRange(e.target.value)}
+            className="admin-btn" 
+            style={{ background: 'var(--admin-surface)', border: '1px solid var(--admin-border)', color: 'var(--admin-text-primary)', outline: 'none', cursor: 'pointer' }}
+          >
+            <option value="7d">Últimos 7 dias</option>
+            <option value="30d">Últimos 30 dias</option>
+            <option value="6m">Últimos 6 meses</option>
+            <option value="1y">Último ano</option>
+          </select>
           <button className="admin-btn admin-btn-primary">
             <Download size={16} />
             Exportar Relatório
@@ -102,7 +133,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Cards de Resumo */}
-      <div className="content-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+      <div className="stats-grid">
         {[
           { label: 'Total Visualizações (Geral)', value: loading ? <Loader2 className="spin" size={20}/> : totals.views.toLocaleString('pt-BR'), trend: 'Verificado', icon: Eye, color: 'var(--admin-primary)' },
           { label: 'Visitantes Únicos', value: loading ? <Loader2 className="spin" size={20}/> : totals.users.toLocaleString('pt-BR'), trend: 'Sessões', icon: Users, color: 'var(--admin-success)' },
@@ -150,7 +181,9 @@ export default function AnalyticsPage() {
       <div className="glass-card admin-animate-in-delay-3" style={{ padding: 24, minHeight: 400 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 30 }}>
           <BarChart3 size={20} color="var(--admin-primary)" />
-          <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--admin-text-primary)' }}>Evolução de Acesso (Últimos 6 meses)</h2>
+          <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--admin-text-primary)' }}>
+            Evolução de {timeRange === '7d' || timeRange === '30d' ? 'Visitas (Diário)' : 'Acesso'}
+          </h2>
         </div>
 
         {loading ? (
@@ -159,7 +192,7 @@ export default function AnalyticsPage() {
            </div>
         ) : (
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16, height: 280, paddingBottom: 20, borderBottom: '1px solid var(--admin-border)' }}>
-            {monthlyData.map((data, i) => (
+            {chartData.map((data: any, i: number) => (
               <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, height: '100%', justifyContent: 'flex-end' }}>
                 <span style={{ fontSize: '0.75rem', fontWeight: 700, color: data.views > 0 ? 'var(--admin-primary)' : 'var(--admin-text-tertiary)' }}>{data.views}</span>
                 <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center', height: '100%', alignItems: 'flex-end' }}>
@@ -171,12 +204,12 @@ export default function AnalyticsPage() {
                       borderRadius: 'var(--admin-radius-sm) var(--admin-radius-sm) 0 0',
                       height: mounted ? `${(data.views / maxViews) * 100}%` : '0%',
                       transition: 'height 1s cubic-bezier(0.22, 1, 0.36, 1)',
-                      transitionDelay: `${i * 0.1}s`,
+                      transitionDelay: `${i * 0.05}s`,
                       minHeight: data.views === 0 ? 4 : 10
                     }} 
                   />
                 </div>
-                <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--admin-text-secondary)' }}>{data.monthStr}</span>
+                <span style={{ fontSize: '0.65rem', fontWeight: 600, color: 'var(--admin-text-secondary)', textAlign: 'center' }}>{data.label}</span>
               </div>
             ))}
           </div>

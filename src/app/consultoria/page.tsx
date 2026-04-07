@@ -35,9 +35,15 @@ export default function Consultoria() {
             <p style={{ maxWidth: 700, margin: '0 auto 40px', fontSize: '1.25rem', color: 'var(--site-text-secondary)', lineHeight: 1.6 }}>
               Soluções educacionais customizadas para prefeituras, instituições privadas e projetos de alto impacto social.
             </p>
-            <button className="btn btn-primary" style={{ padding: '16px 40px', fontSize: '1.1rem' }}>
+            <a 
+              href="https://wa.me/5598981242316?text=Olá! Gostaria de agendar uma reunião especializada sobre Consultoria Estratégica."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary" 
+              style={{ padding: '16px 40px', fontSize: '1.1rem', textDecoration: 'none' }}
+            >
               Agendar Reunião Especializada
-            </button>
+            </a>
           </div>
         </section>
 
@@ -62,9 +68,15 @@ export default function Consultoria() {
                     <p style={{ fontSize: '1.05rem', color: 'var(--site-text-secondary)', lineHeight: 1.6, marginBottom: 20 }}>
                       {step.desc}
                     </p>
-                    <button className="btn btn-glass" style={{ color: step.color }}>
+                    <a 
+                      href={`https://wa.me/5598981242316?text=Olá! Gostaria de entender mais sobre a etapa de "${step.title}" da Consultoria Estratégica.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-glass" 
+                      style={{ color: step.color, textDecoration: 'none' }}
+                    >
                       Entender esta etapa <ArrowRight size={16} />
-                    </button>
+                    </a>
                   </div>
                   
                   <div style={{ flex: '1 1 400px', height: 340, borderRadius: 'var(--site-radius-lg)', border: '1px solid var(--site-border)', boxShadow: 'var(--site-shadow-sm)', position: 'relative', zIndex: 1, overflow: 'hidden' }}>
