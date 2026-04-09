@@ -53,6 +53,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               { label: 'Consultoria', path: '/consultoria' },
               { label: 'Blog', path: '/blog' },
               { label: 'Transparência', path: '/transparencia' },
+              { label: 'FAQ', path: '/faq' },
+              { label: 'Contato', path: '/contato' },
             ].map((item) => (
               <Link
                 key={item.label}
@@ -131,6 +133,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                 { label: 'Consultoria', path: '/consultoria' },
                 { label: 'Blog', path: '/blog' },
                 { label: 'Transparência', path: '/transparencia' },
+                { label: 'FAQ', path: '/faq' },
+                { label: 'Contato', path: '/contato' },
               ].map((item) => (
                 <Link
                   key={item.label}

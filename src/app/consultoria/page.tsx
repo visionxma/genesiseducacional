@@ -36,7 +36,7 @@ export default function Consultoria() {
               Soluções educacionais customizadas para prefeituras, instituições privadas e projetos de alto impacto social.
             </p>
             <a 
-              href="https://wa.me/5598981242316?text=Olá! Gostaria de agendar uma reunião especializada sobre Consultoria Estratégica."
+              href="https://wa.me/5598984620194?text=Olá! Gostaria de agendar uma reunião especializada sobre Consultoria Estratégica."
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-primary" 
@@ -69,7 +69,7 @@ export default function Consultoria() {
                       {step.desc}
                     </p>
                     <a 
-                      href={`https://wa.me/5598981242316?text=Olá! Gostaria de entender mais sobre a etapa de "${step.title}" da Consultoria Estratégica.`}
+                      href={`https://wa.me/5598984620194?text=Olá! Gostaria de entender mais sobre a etapa de "${step.title}" da Consultoria Estratégica.`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn btn-glass" 

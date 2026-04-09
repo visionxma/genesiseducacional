@@ -33,6 +33,7 @@ const navItems = [
   { label: 'Blog / Postagens', path: '/admin/dashboard/posts', icon: FileText, section: 'Conteúdo' },
   { label: 'Catálogo de Cursos', path: '/admin/dashboard/cursos', icon: BookOpen, section: 'Conteúdo' },
   { label: 'Transparência', path: '/admin/dashboard/transparencia', icon: ShieldCheck, section: 'Conteúdo' },
+  { label: 'Equipe', path: '/admin/dashboard/equipe', icon: Users, section: 'Conteúdo' },
   { label: 'Configurações', path: '/admin/dashboard/settings', icon: Settings, section: 'Sistema' },
 ];
 
@@ -43,6 +44,7 @@ function getBreadcrumb(path: string) {
     '/admin/dashboard/posts': 'Blog / Postagens',
     '/admin/dashboard/cursos': 'Catálogo de Cursos',
     '/admin/dashboard/transparencia': 'Transparência',
+    '/admin/dashboard/equipe': 'Equipe',
     '/admin/dashboard/settings': 'Configurações',
   };
   return map[path] || 'Dashboard';
