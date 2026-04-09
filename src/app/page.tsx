@@ -1,7 +1,7 @@
 import PublicLayout from './components/PublicLayout';
 import Link from 'next/link';
 import PilaresCarousel from './components/PilaresCarousel';
-import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2, MapPin, Clock, Phone } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -154,6 +154,140 @@ export default function Home() {
               <Link href="/cursos" className="btn" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.35)', color: 'white', padding: '15px 36px' }}>
                 Matrículas Abertas
               </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* 5. LOCALIZAÇÃO */}
+        <section className="glass-section-white section-padding" style={{ padding: '80px 0' }}>
+          <div className="container">
+            <div style={{ textAlign: 'center', marginBottom: 48 }}>
+              <div style={{
+                width: 56, height: 56,
+                background: 'rgba(0, 68, 204, 0.08)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 16px',
+              }}>
+                <MapPin size={28} strokeWidth={1.5} style={{ color: 'var(--site-primary)' }} />
+              </div>
+              <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', marginBottom: 8 }}>Nossa Localização</h2>
+              <p style={{ color: 'var(--site-text-secondary)', fontSize: '1.05rem', maxWidth: 500, margin: '0 auto' }}>
+                Venha nos visitar ou entre em contato para saber mais.
+              </p>
+            </div>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(380px, 100%), 1fr))',
+              gap: 32,
+              alignItems: 'stretch',
+            }}>
+              {/* Mapa */}
+              <div className="glass-panel" style={{ padding: 0, overflow: 'hidden', minHeight: 380 }}>
+                <iframe
+                  src="https://maps.google.com/maps?q=Genesis+Educacional+-2.5500273,-44.2130198&t=&z=17&ie=UTF8&iwloc=&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0, display: 'block', minHeight: 380 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Localização Instituto Gênesis"
+                />
+              </div>
+
+              {/* Info lateral */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                {/* Endereço */}
+                <div className="glass-panel" style={{
+                  padding: '24px 28px', display: 'flex', alignItems: 'flex-start', gap: 16,
+                  flex: 1,
+                }}>
+                  <div style={{
+                    width: 48, height: 48, flexShrink: 0,
+                    background: 'rgba(239, 68, 68, 0.08)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <MapPin size={22} style={{ color: '#EF4444' }} />
+                  </div>
+                  <div>
+                    <p style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--site-text-tertiary)', marginBottom: 6 }}>
+                      Endereço
+                    </p>
+                    <p style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--site-text-primary)', lineHeight: 1.5 }}>
+                      Maranhão / Pará, Brasil
+                    </p>
+                    <p style={{ fontSize: '0.9rem', color: 'var(--site-text-secondary)', marginTop: 4, lineHeight: 1.6 }}>
+                      Atuamos em diversas comunidades e municípios nas regiões do Maranhão e Pará.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Horário */}
+                <div className="glass-panel" style={{
+                  padding: '24px 28px', display: 'flex', alignItems: 'flex-start', gap: 16,
+                  flex: 1,
+                }}>
+                  <div style={{
+                    width: 48, height: 48, flexShrink: 0,
+                    background: 'rgba(245, 158, 11, 0.08)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <Clock size={22} style={{ color: '#F59E0B' }} />
+                  </div>
+                  <div>
+                    <p style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--site-text-tertiary)', marginBottom: 6 }}>
+                      Horário de Atendimento
+                    </p>
+                    <p style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--site-text-primary)' }}>
+                      Segunda a Sexta, 8h às 18h
+                    </p>
+                  </div>
+                </div>
+
+                {/* Telefone */}
+                <a
+                  href="https://wa.me/5598984620194"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-panel"
+                  style={{
+                    padding: '24px 28px', display: 'flex', alignItems: 'flex-start', gap: 16,
+                    flex: 1, textDecoration: 'none',
+                    transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <div style={{
+                    width: 48, height: 48, flexShrink: 0,
+                    background: 'rgba(37, 211, 102, 0.08)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <Phone size={22} style={{ color: '#25D366' }} />
+                  </div>
+                  <div>
+                    <p style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--site-text-tertiary)', marginBottom: 6 }}>
+                      Telefone / WhatsApp
+                    </p>
+                    <p style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--site-text-primary)' }}>
+                      (98) 8462-0194
+                    </p>
+                  </div>
+                </a>
+
+                {/* Botão Contato */}
+                <Link
+                  href="/contato"
+                  className="btn btn-primary"
+                  style={{
+                    padding: '16px 32px', fontSize: '1rem',
+                    textAlign: 'center', textDecoration: 'none',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  }}
+                >
+                  Ver todos os canais de contato <ArrowRight size={16} />
+                </Link>
+              </div>
             </div>
           </div>
         </section>

@@ -4,7 +4,8 @@ import type { NextConfig } from "next";
 const ContentSecurityPolicy = `
   default-src 'self';
   script-src 'self' 'unsafe-eval' 'unsafe-inline' https://izhatyrzmxzbhvjifspn.supabase.co;
-  child-src 'self';
+  child-src 'self' https://maps.google.com https://www.google.com;
+  frame-src 'self' https://maps.google.com https://www.google.com;
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
   img-src 'self' blob: data: https://izhatyrzmxzbhvjifspn.supabase.co https://images.unsplash.com;
   media-src 'none';
