@@ -61,7 +61,7 @@ export default function Contato() {
       .from('equipe')
       .select('*')
       .order('ordem', { ascending: true })
-      .then(({ data }) => {
+      .then(({ data }: { data: Membro[] | null }) => {
         if (data) setEquipe(data);
         setLoading(false);
       });
