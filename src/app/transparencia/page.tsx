@@ -260,6 +260,70 @@ export default function Transparencia() {
                   </p>
                 </div>
 
+                {/* Card Fixo - Estatuto e Ata */}
+                <div
+                  style={{
+                    background: 'var(--site-surface)',
+                    border: '1px solid var(--site-border)',
+                    boxShadow: 'var(--site-shadow-sm)',
+                    transition: 'all 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
+                    overflow: 'hidden',
+                    marginBottom: 24,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: 16,
+                    padding: '20px 24px',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.06)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.boxShadow = 'var(--site-shadow-sm)';
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{
+                      width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      background: '#0044CC10', color: '#0044CC', borderRadius: '50%',
+                    }}>
+                      <ScrollText size={20} />
+                    </div>
+                    <div>
+                      <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: 'var(--site-text)' }}>
+                        Estatuto e Ata
+                      </h3>
+                      <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--site-text-secondary)' }}>
+                        Documentos institucionais da organização
+                      </p>
+                    </div>
+                  </div>
+                  <a
+                    href="https://drive.google.com/drive/folders/13jB7033FZqKcWXgAaneIJvyZjqB8UAdV?usp=sharing"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                      padding: '8px 16px', fontSize: '0.82rem', fontWeight: 600,
+                      color: '#fff', background: 'var(--site-primary)',
+                      textDecoration: 'none', transition: 'all 0.2s ease',
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.background = 'var(--site-primary-hover)';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.background = 'var(--site-primary)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    <FileCheck size={14} />
+                    Ver documentos
+                    <ExternalLink size={12} />
+                  </a>
+                </div>
+
                 {filtered.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--site-text-tertiary)' }}>
                     <Search size={36} style={{ opacity: 0.3, marginBottom: 12 }} />
@@ -460,7 +524,7 @@ export default function Transparencia() {
                                     }}
                                   >
                                     <FileCheck size={14} />
-                                    Ver documento
+                                    Ver documentos
                                     <ExternalLink size={12} />
                                   </a>
                                 ) : (
