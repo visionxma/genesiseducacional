@@ -55,6 +55,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               { label: 'Transparência', path: '/transparencia' },
               { label: 'FAQ', path: '/faq' },
               { label: 'Contato', path: '/contato' },
+              { label: 'GêneSIS', path: 'https://genesisfinanceiro.org/', external: true },
             ].map((item) => (
               <Link
                 key={item.label}
